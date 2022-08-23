@@ -14,4 +14,8 @@ public class Person
         Phone = phone;
         Birthday = birthday;
     }
+
+    public Person()
+    {
+    }
 }
