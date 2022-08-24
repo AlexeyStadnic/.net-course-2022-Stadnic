@@ -3,5 +3,5 @@
 public struct Currency
 {
     public int Code { get; set; }
-    public string Value { get; set; }
+    public string Name { get; set; }
 }
