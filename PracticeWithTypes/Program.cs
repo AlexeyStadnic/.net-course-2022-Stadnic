@@ -1,22 +1,24 @@
 ﻿using Models;
 using BankService;
 
-class Example
+class Program
 {
     static void Main()
     {
-        DateTime birthday = new DateTime(1986, 2, 9);
-        Employee owner = new Employee();
-        owner.Name = "Алексей";
-        owner.Passport = 14714;
-        owner.Birthday = birthday;
-        owner.Phone = "077881886";
 
-        UpdateContractEmployee(owner); // меняет контракт, используя неправильный подход
-        Console.WriteLine(owner.Contract);
-        
-        owner.Contract = UpdateContractEmployeeCorrect(owner.Name,owner.Passport,owner.Phone,owner.Birthday); // меняет контракт, используя правильный подход
-        Console.WriteLine(owner.Contract);
+        DateTime birthday = new DateTime(1986, 2, 9);        
+        Employee human = new Employee();
+        human.Name = "Алексей";
+        human.Passport = 14714;
+        human.Birthday = birthday;
+        human.Phone = "077881886";
+
+        UpdateContractEmployee(human); // меняет контракт, используя неправильный подход
+        Console.WriteLine(human.Contract);        
+
+        human.Contract = UpdateContractEmployeeCorrect(human.Name, human.Passport, human.Phone, human.Birthday); // меняет контракт, используя правильный подход
+        Console.WriteLine(human.Contract);
+
 
         Currency currency = new Currency();
         currency.Code = 978;
@@ -31,8 +33,8 @@ class Example
         // рассчет зарплаты владельцев банка
         Bank bank = new Bank();
         Console.WriteLine("Зарплата владельцев банка равна: ");
-        owner.Salary = bank.PayrollForBankOwners(20, 10, 3);
-        Console.WriteLine(owner.Salary);
+        human.Salary = bank.PayrollForBankOwners(20, 10, 3);
+        Console.WriteLine(human.Salary);
         
         // Превращение клиента в сотрудника 
         Client client = new Client();
@@ -42,7 +44,7 @@ class Example
         Console.WriteLine("Зарплата нового сотрудника, по имени " + 
                           employee.Name + ", составляет " + employee.Salary + " " + currency.Name);
         
-        // неправильный подход к обновлению контракта сотрудника
+        // неправильный подход к обновлению контракта сотрудника       
         void UpdateContractEmployee(Employee employee)
         {
             employee.Contract = "Здравствуйте, дорогой " + employee.Name + ", " + employee.Birthday.Year + 
@@ -50,6 +52,7 @@ class Example
                                 "номер паспорта " + employee.Passport + " и номер телефона " +
                                 employee.Phone + ". Проверьте пожалуйста правильность данных.";
         }
+
 
         // правильный подход к обновлению контракта сотрудника
         string UpdateContractEmployeeCorrect(string name, int passport, string phone, DateTime birthday)
