@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Bogus;
+using Models;
 
 namespace Services;
 
@@ -49,5 +50,25 @@ public class TestDataGenerator
             client.Birthday = dateEnd.AddDays(random.Next(allowableAgeEnd - allowableAgeStart));            
         }
     }
-    
+
+    public void RandomAddClientsBogus(List<Client> clients)
+    {
+        DateTime today = DateTime.Today;
+        DateTime dateEnd = new DateTime(today.Year - 60, today.Month, today.Day); // граница пенсионного возраста
+        DateTime dateStart = new DateTime(today.Year - 18, today.Month, today.Day); // граница совершенолетия
+
+        var testClient = new Faker<Client>("ru")
+            .RuleFor(c => c.Name, f => f.Name.FirstName())
+            .RuleFor(c => c.Passport, f => f.Random.Int(1, 9999999))
+            .RuleFor(c => c.Phone, f => f.Phone.PhoneNumberFormat())
+            .RuleFor(c => c.Birthday, f => f.Date.Between(dateStart,dateEnd));   
+
+        foreach (Client client in clients)
+        {
+            client.Name = testClient.Generate().Name;
+            client.Passport = testClient.Generate().Passport;
+            client.Phone = testClient.Generate().Phone;
+            client.Birthday = testClient.Generate().Birthday;
+        }        
+    }
 }
