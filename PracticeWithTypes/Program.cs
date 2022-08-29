@@ -1,5 +1,5 @@
 ﻿using Models;
-using BankService;
+using Services;
 
 class Program
 {
@@ -31,7 +31,7 @@ class Program
         Console.WriteLine("Изначально используется валюта EUR, пробуем поменять. Результат " + currency.Name);
 
         // рассчет зарплаты владельцев банка
-        Bank bank = new Bank();
+        BankService bank = new BankService();
         Console.WriteLine("Зарплата владельцев банка равна: ");
         human.Salary = bank.PayrollForBankOwners(20, 10, 3);
         Console.WriteLine(human.Salary);
