@@ -66,4 +66,20 @@ public class TestDataGenerator
         }
         return dictionary;
     }
+
+    public Dictionary<Client, Account> GenerateDictionaryClients(List<Client> clients)
+    {      
+        Dictionary<Client, Account> dictionary = new Dictionary<Client, Account>();
+
+        var testAccount = new Faker<Account>("ru")
+            .RuleFor(a => a.Amount, f => f.Random.Int(1, 10000000));          
+
+        foreach (var client in clients)
+        {
+            Account account = new Account();
+            account.Amount = testAccount.Generate().Amount;
+            dictionary.Add(client,account);
+        }
+        return dictionary;
+    }
 }
