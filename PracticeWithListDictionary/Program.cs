@@ -45,9 +45,6 @@ class Program
         int minSalary = employees.Min(c => c.Salary);
         Employee employeeWithMinSalary = employees.First(c => c.Salary == minSalary);
         Console.WriteLine("Сотрудник с минимальной зарплатой " + employeeWithMinSalary.Name);
-        Console.WriteLine("Зарплата составляет " + employeeWithMinSalary.Salary);
-
-        EquivalenceTests equivalenceTests = new EquivalenceTests();
-        equivalenceTests.GetHashCodeNecessityPositivTest();
+        Console.WriteLine("Зарплата составляет " + employeeWithMinSalary.Salary);        
     }
 }

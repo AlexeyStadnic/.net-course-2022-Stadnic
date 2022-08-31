@@ -13,15 +13,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWithTypes", "PracticeWithTypes\PracticeWithTypes.csproj", "{91C2161A-505D-4D59-8A30-572B93CFF5C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{68516DFA-9663-43F0-8F5D-D4F21F7CECE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{68516DFA-9663-43F0-8F5D-D4F21F7CECE3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D} = {3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeWithListDictionary", "PracticeWithListDictionary\PracticeWithListDictionary.csproj", "{67862A47-FF20-407D-AA7D-FC6766A445EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWithListDictionary", "PracticeWithListDictionary\PracticeWithListDictionary.csproj", "{67862A47-FF20-407D-AA7D-FC6766A445EC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D} = {3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D}
 		{68516DFA-9663-43F0-8F5D-D4F21F7CECE3} = {68516DFA-9663-43F0-8F5D-D4F21F7CECE3}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeWithEqualsGetHashCode", "PracticeWithEqualsGetHashCode\PracticeWithEqualsGetHashCode.csproj", "{0814E27F-9227-4A09-8525-BFB9C07F8E94}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D} = {3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D}
+		{68516DFA-9663-43F0-8F5D-D4F21F7CECE3} = {68516DFA-9663-43F0-8F5D-D4F21F7CECE3}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeWithEqualsGetHashCode.Tests", "PracticeWithEqualsGetHashCode.Tests\PracticeWithEqualsGetHashCode.Tests.csproj", "{E19D3D3A-7596-486C-9241-850706AC0F48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0814E27F-9227-4A09-8525-BFB9C07F8E94} = {0814E27F-9227-4A09-8525-BFB9C07F8E94}
 	EndProjectSection
 EndProject
 Global
@@ -46,6 +57,14 @@ Global
 		{67862A47-FF20-407D-AA7D-FC6766A445EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67862A47-FF20-407D-AA7D-FC6766A445EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67862A47-FF20-407D-AA7D-FC6766A445EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0814E27F-9227-4A09-8525-BFB9C07F8E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0814E27F-9227-4A09-8525-BFB9C07F8E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0814E27F-9227-4A09-8525-BFB9C07F8E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0814E27F-9227-4A09-8525-BFB9C07F8E94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E19D3D3A-7596-486C-9241-850706AC0F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E19D3D3A-7596-486C-9241-850706AC0F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E19D3D3A-7596-486C-9241-850706AC0F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E19D3D3A-7596-486C-9241-850706AC0F48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +74,8 @@ Global
 		{91C2161A-505D-4D59-8A30-572B93CFF5C7} = {BCDD88E8-992E-4798-A26E-12FB1F55E5A5}
 		{68516DFA-9663-43F0-8F5D-D4F21F7CECE3} = {2DAB60D7-5A6B-4CEC-A89D-2D0EA563B334}
 		{67862A47-FF20-407D-AA7D-FC6766A445EC} = {BCDD88E8-992E-4798-A26E-12FB1F55E5A5}
+		{0814E27F-9227-4A09-8525-BFB9C07F8E94} = {BCDD88E8-992E-4798-A26E-12FB1F55E5A5}
+		{E19D3D3A-7596-486C-9241-850706AC0F48} = {2DAB60D7-5A6B-4CEC-A89D-2D0EA563B334}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0097849E-39FC-49C1-B05C-98D472240A58}

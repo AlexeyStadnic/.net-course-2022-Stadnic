@@ -70,14 +70,18 @@ public class TestDataGenerator
     public Dictionary<Client, Account> GenerateDictionaryClients(List<Client> clients)
     {      
         Dictionary<Client, Account> dictionary = new Dictionary<Client, Account>();
+        Currency currency = new Currency();
+        currency.Name = "USD";
+        currency.Code = 840;
 
         var testAccount = new Faker<Account>("ru")
-            .RuleFor(a => a.Amount, f => f.Random.Int(1, 10000000));          
+            .RuleFor(a => a.Amount, f => f.Random.Int(1, 10000000));                  
 
         foreach (var client in clients)
         {
             Account account = new Account();
             account.Amount = testAccount.Generate().Amount;
+            account.Currency = currency;
             dictionary.Add(client,account);
         }
         return dictionary;
