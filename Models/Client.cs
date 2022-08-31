@@ -1,7 +1,4 @@
-﻿using Bogus.Bson;
-using Bogus.DataSets;
-
-namespace Models;
+﻿namespace Models;
 
 public class Client:Person
 {
