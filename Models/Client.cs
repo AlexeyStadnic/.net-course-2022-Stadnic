@@ -9,7 +9,7 @@ public class Client:Person
         if (!(obj is Client))
             return false;
         var client = (Client)obj;
-        //return name.Value == Value;        
+                
         return client.Name == Name && client.Passport == Passport && client.Phone == Phone && client.Birthday == Birthday;
     }
 

@@ -67,22 +67,34 @@ public class TestDataGenerator
         return dictionary;
     }
 
-    public Dictionary<Client, Account> GenerateDictionaryClients(List<Client> clients)
+    public Dictionary<Client, List<Account>> GenerateDictionaryClients(List<Client> clients)
     {      
-        Dictionary<Client, Account> dictionary = new Dictionary<Client, Account>();
-        Currency currency = new Currency();
-        currency.Name = "USD";
-        currency.Code = 840;
+        Dictionary<Client, List<Account>> dictionary = new Dictionary<Client, List<Account>>();
+        Currency currencyUSD = new Currency();
+        currencyUSD.Name = "USD";
+        currencyUSD.Code = 840;
+        Currency currencyEUR = new Currency();
+        currencyEUR.Name = "EUR";
+        currencyEUR.Code = 978;
 
         var testAccount = new Faker<Account>("ru")
             .RuleFor(a => a.Amount, f => f.Random.Int(1, 10000000));                  
 
         foreach (var client in clients)
         {
-            Account account = new Account();
-            account.Amount = testAccount.Generate().Amount;
-            account.Currency = currency;
-            dictionary.Add(client,account);
+            List<Account> accounts = new List<Account>();
+            
+            Account accountUSD = new Account();
+;           accountUSD.Amount = testAccount.Generate().Amount;
+            accountUSD.Currency = currencyUSD;
+            accounts.Add(accountUSD);
+            
+            Account accountEUR = new Account();
+            accountEUR.Amount = testAccount.Generate().Amount;
+            accountEUR.Currency = currencyEUR;
+            accounts.Add(accountEUR);
+            
+            dictionary.Add(client,accounts);
         }
         return dictionary;
     }
