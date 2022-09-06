@@ -36,9 +36,7 @@ public class ClientService
         if (accountsDefaultList.Count == 0)
         {
             throw new AccountsListIsEmptyException("Ошибка. У клиента отсутствуют счета.");
-        }
-
-        dictionaryClients.Add(client, accountsDefaultList);        
+        }               
 
         dictionaryClients.Add(client, accountsDefaultList);
     }

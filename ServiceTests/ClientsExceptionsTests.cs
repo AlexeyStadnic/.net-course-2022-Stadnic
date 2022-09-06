@@ -56,10 +56,22 @@ namespace ServiceTests
             client.Phone = "77881886";
             client.Passport = 14714;
 
-            var clientService = new ClientService();                
+            var clientService = new ClientService();
 
-            // Act/Assert
-            Assert.Throws<ArgumentException>(() => clientService.AddClientInDictionary(client));
+            //Act
+            try
+            {
+                clientService.AddClientInDictionary(client);
+                //clientService.AddClientInDictionary(client);
+            }
+            catch (ArgumentException e)
+            {
+                Assert.True(false);
+            }    
+            catch (Exception e)
+            {
+                Assert.True(false);
+            }            
         }
     }
 }
