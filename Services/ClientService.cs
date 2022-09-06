@@ -40,4 +40,35 @@ public class ClientService
 
         dictionaryClients.Add(client, accountsDefaultList);
     }
+    
+    public void AddAccountInClient(Client client,Account account)
+    {
+        try
+        {
+            var accountsOfClient = dictionaryClients[client];
+            if (accountsOfClient.Contains(account))
+            {
+                throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
+            }
+            accountsOfClient.Add(account);
+            dictionaryClients[client] = accountsOfClient;
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+    
+    public void EditAccountInClient(Client client,Account currentAccount, Account newAccount)
+    {
+        try
+        {
+            var accountsOfClient = dictionaryClients[client];
+            accountsOfClient[accountsOfClient.IndexOf(currentAccount)] = newAccount;
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 }
