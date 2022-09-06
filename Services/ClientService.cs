@@ -38,12 +38,7 @@ public class ClientService
             throw new AccountsListIsEmptyException("Ошибка. У клиента отсутствуют счета.");
         }
 
-        dictionaryClients.Add(client, accountsDefaultList);
-
-        if (dictionaryClients.ContainsKey(client))
-        {
-            throw new DuplicateClientInDictionaryException("Ошибка. Этот клиент уже есть в словаре.");
-        }
+        dictionaryClients.Add(client, accountsDefaultList);        
 
         dictionaryClients.Add(client, accountsDefaultList);
     }

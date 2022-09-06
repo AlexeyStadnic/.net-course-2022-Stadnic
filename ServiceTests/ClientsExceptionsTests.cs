@@ -59,7 +59,7 @@ namespace ServiceTests
             var clientService = new ClientService();                
 
             // Act/Assert
-            Assert.Throws<DuplicateClientInDictionaryException>(() => clientService.AddClientInDictionary(client));
+            Assert.Throws<ArgumentException>(() => clientService.AddClientInDictionary(client));
         }
     }
 }
