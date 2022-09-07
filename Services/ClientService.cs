@@ -45,17 +45,24 @@ public class ClientService
         
         _dictionaryClients[client].Add(account);        
     }
-    
-    public void EditAccount(Client client,Account account)
-    {        
-        var accountsOfClient = _dictionaryClients[client];
 
-        var currentAccount = accountsOfClient.Find(a => a.Currency.Equals(account.Currency));
-        if (currentAccount != null)
+    public void EditAccount(Client client, Account account)
+    {
+        var accountsOfClient = _dictionaryClients[client];
+        int numberOfChanges = 0;
+
+        for (int i = 0; i < accountsOfClient.Count; i++)
         {
-            var index = accountsOfClient.IndexOf(currentAccount);
-            accountsOfClient[index].Amount = account.Amount;
+            if ((accountsOfClient[i].Currency.Code == account.Currency.Code) &&
+                    (accountsOfClient[i].Currency.Name == account.Currency.Name))
+            {
+                accountsOfClient[i].Amount = account.Amount;
+                numberOfChanges++;
+            }
         }
-        else throw new NoSuchAccountException("Ошибка. У клиента нет такого счета");    
+        if (numberOfChanges == 0)
+        {
+            throw new NoSuchAccountException("Ошибка. У клиента нет такого счета");
+        }        
     }
 }

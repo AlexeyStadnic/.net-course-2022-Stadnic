@@ -88,10 +88,10 @@ namespace ServiceTests
             account.Amount = 1000;
             account.Currency = currencyEur;
 
-            clientService.AddAccount(client,account);            
+            clientService.AddAccount(client,account);
 
             var accountNew = new Account();
-            accountNew.Amount = 12125;     
+            accountNew.Amount = 12125;
             accountNew.Currency = currencyEur;
 
             try
