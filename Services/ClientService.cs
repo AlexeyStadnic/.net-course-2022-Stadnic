@@ -24,7 +24,7 @@ public class ClientService
 
         if (DateTime.Today.Year - client.Birthday.Year < 18)
         {
-            throw new YongAgeException("Ошибка. Клиент слишком молод.");
+            throw new YoungAgeException("Ошибка. Клиент слишком молод.");
         }
 
         if (client.Passport == 0)
@@ -50,8 +50,12 @@ public class ClientService
     {        
         var accountsOfClient = _dictionaryClients[client];
 
-        var find = accountsOfClient.Find(a => a.Currency.Equals(account.Currency));
-        var index = accountsOfClient.IndexOf(find);
-        accountsOfClient[index].Amount = account.Amount;       
+        var currentAccount = accountsOfClient.Find(a => a.Currency.Equals(account.Currency));
+        if (currentAccount != null)
+        {
+            var index = accountsOfClient.IndexOf(currentAccount);
+            accountsOfClient[index].Amount = account.Amount;
+        }
+        else throw new NoSuchAccountException("Ошибка. У клиента нет такого счета");    
     }
 }

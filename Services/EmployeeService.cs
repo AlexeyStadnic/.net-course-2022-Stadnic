@@ -13,7 +13,7 @@ public class EmployeeService
         
         if (today.Year - employee.Birthday.Year < 18)
         {
-            throw new YongAgeException("Ошибка. Клиент слишком молод.");
+            throw new YoungAgeException("Ошибка. Клиент слишком молод.");
         }
         
         if (employee.Passport == 0)

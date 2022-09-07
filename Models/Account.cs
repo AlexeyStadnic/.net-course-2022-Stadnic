@@ -18,10 +18,5 @@ public class Account
         var account = (Account)obj;
 
         return account.Amount == Amount && account.Currency.Equals(Currency);
-    }
-
-    public override int GetHashCode()
-    {
-        return Amount.GetHashCode() ^ Currency.GetHashCode();
-    }
+    }    
 }

@@ -16,7 +16,7 @@ namespace ServiceTests
             var employeeService = new EmployeeService();
 
             // Act/Assert            
-            Assert.Throws<YongAgeException>(() => employeeService.AddEmployee(employee));
+            Assert.Throws<YoungAgeException>(() => employeeService.AddEmployee(employee));
         }
 
         [Fact]

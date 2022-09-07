@@ -16,7 +16,7 @@ namespace ServiceTests
             var clientService = new ClientService();
 
             // Act/Assert
-            Assert.Throws<YongAgeException>(() => clientService.AddClient(client));
+            Assert.Throws<YoungAgeException>(() => clientService.AddClient(client));
         }
 
         [Fact]
@@ -28,38 +28,10 @@ namespace ServiceTests
 
             // Act/Assert
             Assert.Throws<NoPassportException>(() => clientService.AddClient(client));
-        }        
-
-        [Fact]
-        public void DuplicateClientInDictionaryExceptionTest()
-        {
-            // Arrange
-            var client = new Client();
-            client.Name = "Алексей";
-            client.Birthday = new DateTime(1986, 2, 9);
-            client.Phone = "77881886";
-            client.Passport = 14714;
-
-            var clientService = new ClientService();
-
-            //Act
-            try
-            {
-                clientService.AddClient(client);
-                //clientService.AddClient(client);
-            }
-            catch (ArgumentException e)
-            {
-                Assert.True(false);
-            }    
-            catch (Exception e)
-            {
-                Assert.True(false);
-            }            
-        }
+        }                
         
         [Fact]
-        public void AddAccountExceptionTest()
+        public void AccountAlreadyExistsExceptionTest()
         {
             // Arrange
             var client = new Client();
@@ -80,19 +52,11 @@ namespace ServiceTests
             currencyEur.Code = 978;
 
             account.Amount = 1000;
-            account.Currency = currencyEur;
-
-            var account2 = new Account();
-            var currencyEur2 = new Currency();
-            currencyEur2.Name = "EUR";
-            currencyEur2.Code = 978;
-            account2.Amount = 1000;
-            account2.Currency = currencyEur2;
+            account.Currency = currencyEur;            
 
             try
             {
-                clientService.AddAccount(client, account);
-                //clientService.AddAccount(client,account2);
+                clientService.AddAccount(client, account);                
             }
             catch(KeyNotFoundException e) 
             { 
@@ -101,7 +65,7 @@ namespace ServiceTests
         }
         
         [Fact]
-        public void EditAccountExceptionTest()
+        public void NoSuchAccountExceptionTest()
         {
             // Arrange
             var client = new Client();
@@ -124,13 +88,15 @@ namespace ServiceTests
             account.Amount = 1000;
             account.Currency = currencyEur;
 
-            clientService.AddAccount(client,account);                       
+            clientService.AddAccount(client,account);            
 
-            account.Amount = 12125;           
+            var accountNew = new Account();
+            accountNew.Amount = 12125;     
+            accountNew.Currency = currencyEur;
 
             try
             {
-                clientService.EditAccount(client, account);
+                clientService.EditAccount(client, accountNew);
             }
             catch (ArgumentOutOfRangeException e)
             {
