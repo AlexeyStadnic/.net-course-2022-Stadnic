@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ServiceTests
 {
-    public class EmployeesExceptionsTests
+    public class EmployeesServicesTests
     {
         [Fact]
         public void YongAgeExceptionTest()
