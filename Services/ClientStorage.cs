@@ -26,7 +26,7 @@ public class ClientStorage : IStorage
         _dictionaryClients[client].Add(account);        
     }
     
-    /*public void Update(Client client, Account account)
+    public void Update(Client client, Account account)
     {
         var accountsOfClient = _dictionaryClients[client];
         int numberOfChanges = 0;
@@ -34,7 +34,7 @@ public class ClientStorage : IStorage
         for (int i = 0; i < accountsOfClient.Count; i++)
         {
             if ((accountsOfClient[i].Currency.Code == account.Currency.Code) &&
-                (accountsOfClient[i].Currency.Name == account.Currency.Name))
+                    (accountsOfClient[i].Currency.Name == account.Currency.Name))
             {
                 accountsOfClient[i].Amount = account.Amount;
                 numberOfChanges++;
@@ -43,8 +43,8 @@ public class ClientStorage : IStorage
         if (numberOfChanges == 0)
         {
             throw new NoSuchAccountException("Ошибка. У клиента нет такого счета");
-        }        
-    }*/
+        }
+    }
 
     public void Add()
     {

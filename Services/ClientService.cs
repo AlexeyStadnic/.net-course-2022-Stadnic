@@ -1,5 +1,6 @@
 ﻿using Models;
 using Services.Exceptions;
+using System.Collections;
 
 namespace Services;
 
@@ -34,23 +35,14 @@ public class ClientService
         _clientStorage.Add(client,account);
     }
 
-    /*public void EditAccount(Client client, Account account)
+    public void UpdateAccount(Client client, Account account)
     {
-        var accountsOfClient = _clientStorage._dictionaryClients[client];
-        int numberOfChanges = 0;
+        _clientStorage.Update(client, account);
+    }
 
-        for (int i = 0; i < accountsOfClient.Count; i++)
-        {
-            if ((accountsOfClient[i].Currency.Code == account.Currency.Code) &&
-                    (accountsOfClient[i].Currency.Name == account.Currency.Name))
-            {
-                accountsOfClient[i].Amount = account.Amount;
-                numberOfChanges++;
-            }
-        }
-        if (numberOfChanges == 0)
-        {
-            throw new NoSuchAccountException("Ошибка. У клиента нет такого счета");
-        }        
-    }*/
+    public Dictionary<Client, List<Account>> GetClients()
+    {
+        return _clientStorage._dictionaryClients;       
+    }
+
 }

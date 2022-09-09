@@ -3,6 +3,7 @@ using Services.Exceptions;
 using Services;
 using Xunit;
 
+
 namespace ServiceTests
 {
     public class ClientsServicesTests
@@ -67,8 +68,8 @@ namespace ServiceTests
             }
         }
         
-        //[Fact]
-       /* public void NoSuchAccountExceptionTest()
+        [Fact]
+        public void NoSuchAccountExceptionTest()
         {
             // Arrange
             var client = new Client();
@@ -94,18 +95,77 @@ namespace ServiceTests
 
             clientService.AddAccount(client,account);
 
-            var accountNew = new Account();
+            var accountNew = new Account();            
             accountNew.Amount = 12125;
             accountNew.Currency = currencyEur;
 
             try
             {
-                clientService.EditAccount(client, accountNew);
+                clientService.UpdateAccount(client, accountNew);
             }
             catch (ArgumentOutOfRangeException e)
             {
                 Assert.True(false);
             }
-        }*/
+        }
+
+        [Fact]
+        public void AddPositiveTest()
+        {
+            // Arrange      
+
+            var clientStorage = new ClientStorage();
+            var clientService = new ClientService(clientStorage);
+            TestDataGenerator testDataGenerator = new TestDataGenerator();
+            List<Client> clients = testDataGenerator.GenerateThousandClients();
+
+            // Act
+            foreach (Client client in clients)
+            {
+                clientService.AddClient(client);
+            }
+            
+            // Assert
+            if (clientStorage._dictionaryClients.Count != 1000)
+            {
+                Assert.True(false);
+            }
+        }
+
+        [Fact]
+        public void SelectClientPositiveTest()
+        {
+            // Arrange      
+
+            var clientStorage = new ClientStorage();
+            var clientService = new ClientService(clientStorage);
+            TestDataGenerator testDataGenerator = new TestDataGenerator();
+            List<Client> clients = testDataGenerator.GenerateThousandClients();
+            
+            foreach (Client client in clients)
+            {
+                clientService.AddClient(client);
+            }
+
+            // Act
+            DateTime youngClientBirthday = clientService.GetClients().Max(c => c.Key.Birthday);
+            var youngClient = clientService.GetClients().FirstOrDefault(c => c.Key.Birthday.Equals(youngClientBirthday));
+            
+
+            DateTime oldClientBirthday = clientService.GetClients().Min(c => c.Key.Birthday);
+            var oldClient = clientService.GetClients().FirstOrDefault(c => c.Key.Birthday.Equals(oldClientBirthday));
+
+            double averageAgeClient = clientService.GetClients().Average(c => (DateTime.Now.Year - c.Key.Birthday.Year));
+
+            // Assert
+            if (averageAgeClient > 18)
+            {
+                Assert.True(true);
+            }
+            else
+            {
+                Assert.True(false);
+            }            
+        }
     }
 }
