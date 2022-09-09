@@ -73,11 +73,11 @@ namespace ServiceTests
 
             // Act
             DateTime youngEmployeeBirthday = employeeService.GetEmployees().Max(e => e.Birthday);
-            var youngClient = employeeService.GetEmployees().FirstOrDefault(e => e.Birthday.Equals(youngEmployeeBirthday));
+            var youngEmployee = employeeService.GetEmployees().FirstOrDefault(e => e.Birthday.Equals(youngEmployeeBirthday));
 
 
             DateTime oldEmployeeBirthday = employeeService.GetEmployees().Min(e => e.Birthday);
-            var oldClient = employeeService.GetEmployees().FirstOrDefault(e => e.Birthday.Equals(oldEmployeeBirthday));
+            var oldEmployee = employeeService.GetEmployees().FirstOrDefault(e => e.Birthday.Equals(oldEmployeeBirthday));
 
             double averageAgeEmployee = employeeService.GetEmployees().Average(e => (DateTime.Now.Year - e.Birthday.Year));
 
