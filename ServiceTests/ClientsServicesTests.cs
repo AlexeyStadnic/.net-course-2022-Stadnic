@@ -95,7 +95,7 @@ namespace ServiceTests
 
             clientService.AddAccount(client,account);
 
-            var accountNew = new Account();            
+            var accountNew = new Account();      
             accountNew.Amount = 12125;
             accountNew.Currency = currencyEur;
 
@@ -104,6 +104,10 @@ namespace ServiceTests
                 clientService.UpdateAccount(client, accountNew);
             }
             catch (ArgumentOutOfRangeException e)
+            {
+                Assert.True(false);
+            }
+            catch (NullReferenceException e)
             {
                 Assert.True(false);
             }
@@ -141,6 +145,10 @@ namespace ServiceTests
             var clientService = new ClientService(clientStorage);
             TestDataGenerator testDataGenerator = new TestDataGenerator();
             List<Client> clients = testDataGenerator.GenerateThousandClients();
+            var filter = new Filter();
+            filter.Name = "Алексей";
+            filter.DateFrom = DateTime.Today.AddYears(-60);
+            filter.DateBefore = DateTime.Today;
             
             foreach (Client client in clients)
             {
@@ -148,14 +156,17 @@ namespace ServiceTests
             }
 
             // Act
-            DateTime youngClientBirthday = clientService.GetClients().Max(c => c.Key.Birthday);
-            var youngClient = clientService.GetClients().FirstOrDefault(c => c.Key.Birthday.Equals(youngClientBirthday));
+            DateTime youngClientBirthday = clientService.GetClients(filter).Max(c => c.Key.Birthday);
+            var youngClient = clientService.GetClients(filter).
+                FirstOrDefault(c => c.Key.Birthday.Equals(youngClientBirthday));
             
 
-            DateTime oldClientBirthday = clientService.GetClients().Min(c => c.Key.Birthday);
-            var oldClient = clientService.GetClients().FirstOrDefault(c => c.Key.Birthday.Equals(oldClientBirthday));
+            DateTime oldClientBirthday = clientService.GetClients(filter).Min(c => c.Key.Birthday);
+            var oldClient = clientService.GetClients(filter).
+                FirstOrDefault(c => c.Key.Birthday.Equals(oldClientBirthday));
 
-            double averageAgeClient = clientService.GetClients().Average(c => (DateTime.Now.Year - c.Key.Birthday.Year));
+            double averageAgeClient = clientService.GetClients(filter).
+                Average(c => (DateTime.Now.Year - c.Key.Birthday.Year));
 
             // Assert
             if (averageAgeClient > 18)

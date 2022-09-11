@@ -65,6 +65,10 @@ namespace ServiceTests
             var employeeService = new EmployeeService(employeeStorage);
             TestDataGenerator testDataGenerator = new TestDataGenerator();
             List<Employee> employees = testDataGenerator.GenerateThousandEmployees();
+            var filter = new Filter();
+            filter.Name = "Алексей";
+            filter.DateFrom = DateTime.Today.AddYears(-60);
+            filter.DateBefore = DateTime.Today;
 
             foreach (Employee employee in employees)
             {
@@ -72,14 +76,16 @@ namespace ServiceTests
             }
 
             // Act
-            DateTime youngEmployeeBirthday = employeeService.GetEmployees().Max(e => e.Birthday);
-            var youngEmployee = employeeService.GetEmployees().FirstOrDefault(e => e.Birthday.Equals(youngEmployeeBirthday));
+            DateTime youngEmployeeBirthday = employeeService.GetEmployees(filter).Max(e => e.Birthday);
+            var youngEmployee = employeeService.GetEmployees(filter).
+                FirstOrDefault(e => e.Birthday.Equals(youngEmployeeBirthday));
 
+            DateTime oldEmployeeBirthday = employeeService.GetEmployees(filter).Min(e => e.Birthday);
+            var oldEmployee = employeeService.GetEmployees(filter).
+                FirstOrDefault(e => e.Birthday.Equals(oldEmployeeBirthday));
 
-            DateTime oldEmployeeBirthday = employeeService.GetEmployees().Min(e => e.Birthday);
-            var oldEmployee = employeeService.GetEmployees().FirstOrDefault(e => e.Birthday.Equals(oldEmployeeBirthday));
-
-            double averageAgeEmployee = employeeService.GetEmployees().Average(e => (DateTime.Now.Year - e.Birthday.Year));
+            double averageAgeEmployee = employeeService.GetEmployees(filter)
+                .Average(e => (DateTime.Now.Year - e.Birthday.Year));
 
             // Assert
             if (averageAgeEmployee > 18)

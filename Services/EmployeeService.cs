@@ -26,8 +26,22 @@ public class EmployeeService
         _employeeStorage.Add(employee);
     }
 
-    public List<Employee> GetEmployees()
+    public List<Employee> GetEmployees(Filter filter)
     {
-        return _employeeStorage._employees; 
+        var selection = _employeeStorage._employees;
+
+        if (filter.Name != null)
+            selection = selection.Where(e => e.Name == filter.Name).ToList();
+        
+        if (filter.Phone != null)
+            selection = selection.Where(e => e.Phone == filter.Phone).ToList();
+
+        if (filter.Passport != 0)
+            selection = selection.Where(e => e.Passport == filter.Passport).ToList();
+        
+        selection = selection.
+            Where(e => e.Birthday >= filter.DateFrom).ToList();
+        
+        return selection;
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace Services;
 using Models;
-using Services.Exceptions;
-
+using Exceptions;
 public class ClientStorage : IStorage
 {
     public readonly Dictionary<Client, List<Account>> _dictionaryClients = new Dictionary<Client, List<Account>>();
@@ -28,22 +27,9 @@ public class ClientStorage : IStorage
     
     public void Update(Client client, Account account)
     {
-        var accountsOfClient = _dictionaryClients[client];
-        int numberOfChanges = 0;
-
-        for (int i = 0; i < accountsOfClient.Count; i++)
-        {
-            if ((accountsOfClient[i].Currency.Code == account.Currency.Code) &&
-                    (accountsOfClient[i].Currency.Name == account.Currency.Name))
-            {
-                accountsOfClient[i].Amount = account.Amount;
-                numberOfChanges++;
-            }
-        }
-        if (numberOfChanges == 0)
-        {
-            throw new NoSuchAccountException("Ошибка. У клиента нет такого счета");
-        }
+        _dictionaryClients[client].FirstOrDefault(a => 
+            (a.Currency.Code == account.Currency.Code) 
+            && (a.Currency.Name == account.Currency.Name)).Amount = account.Amount;
     }
 
     public void Add()
