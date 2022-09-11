@@ -42,24 +42,19 @@ public class ClientService
 
     public Dictionary<Client, List<Account>> GetClients(Filter filter)
     {
-        var selection = _clientStorage._dictionaryClients;
-        
-        if (filter.Name != null)
-            selection = selection.Where(c => c.Key.Name == filter.Name).
-                ToDictionary(c => c.Key, a => a.Value);
-        
-        if (filter.Phone != null)
-            selection = selection.Where(c => c.Key.Phone == filter.Phone).
-                ToDictionary(c => c.Key, a => a.Value);
-        
-        if (filter.Passport != 0)
-            selection = selection.Where(c => c.Key.Passport == filter.Passport).
-                ToDictionary(c => c.Key, a => a.Value);
-        
-        selection = selection.
+        var selection = _clientStorage._dictionaryClients.
             Where(c => c.Key.Birthday >= filter.DateFrom).
-            ToDictionary(c => c.Key, a => a.Value);
-        
-        return selection;
+            Where(c => c.Key.Birthday <= filter.DateBefore);
+
+        if (filter.Name != null)
+            selection = selection.Where(c => c.Key.Name == filter.Name);
+
+        if (filter.Phone != null)
+            selection = selection.Where(c => c.Key.Phone == filter.Phone);
+
+        if (filter.Passport != 0)
+            selection = selection.Where(c => c.Key.Passport == filter.Passport);
+
+        return selection.ToDictionary(c => c.Key, a => a.Value);;
     }
 }

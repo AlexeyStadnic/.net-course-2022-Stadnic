@@ -28,20 +28,19 @@ public class EmployeeService
 
     public List<Employee> GetEmployees(Filter filter)
     {
-        var selection = _employeeStorage._employees;
+        var selection = _employeeStorage._employees.
+            Where(e => e.Birthday >= filter.DateFrom).
+            Where(e => e.Birthday <= filter.DateBefore);
 
         if (filter.Name != null)
-            selection = selection.Where(e => e.Name == filter.Name).ToList();
+            selection = selection.Where(e => e.Name == filter.Name);
         
         if (filter.Phone != null)
-            selection = selection.Where(e => e.Phone == filter.Phone).ToList();
+            selection = selection.Where(e => e.Phone == filter.Phone);
 
         if (filter.Passport != 0)
-            selection = selection.Where(e => e.Passport == filter.Passport).ToList();
-        
-        selection = selection.
-            Where(e => e.Birthday >= filter.DateFrom).ToList();
-        
-        return selection;
+            selection = selection.Where(e => e.Passport == filter.Passport);
+
+        return selection.ToList();
     }
 }
