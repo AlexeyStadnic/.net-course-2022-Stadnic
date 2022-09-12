@@ -6,8 +6,8 @@ namespace Services;
 
 public class ClientService
 {
-    private ClientStorage _clientStorage;
-    public ClientService(ClientStorage clientStorage)
+    private IClientStorage _clientStorage;
+    public ClientService(IClientStorage clientStorage)
     {
         _clientStorage = clientStorage;
     }
@@ -27,22 +27,22 @@ public class ClientService
     
     public void AddAccount(Client client,Account account)
     {       
-        var accountsOfClient = _clientStorage._dictionaryClients[client];
+        var accountsOfClient = _clientStorage.Data[client];
         if (accountsOfClient.Contains(account))
         {
             throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
         }
-        _clientStorage.Add(client,account);
+        _clientStorage.AddAccount(client,account);
     }
 
     public void UpdateAccount(Client client, Account account)
     {
-        _clientStorage.Update(client, account);
+        _clientStorage.UpdateAccount(client, account);
     }
 
     public Dictionary<Client, List<Account>> GetClients(Filter filter)
     {
-        var selection = _clientStorage._dictionaryClients.
+        var selection = _clientStorage.Data.
             Where(c => c.Key.Birthday >= filter.DateFrom).
             Where(c => c.Key.Birthday <= filter.DateBefore);
 

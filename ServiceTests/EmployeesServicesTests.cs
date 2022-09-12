@@ -50,7 +50,7 @@ namespace ServiceTests
             }
 
             // Assert
-            if (employeeStorage._employees.Count != 1000)
+            if (employeeStorage.Data.Count != 1000)
             {
                 Assert.True(false);
             }

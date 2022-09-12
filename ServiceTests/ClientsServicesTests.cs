@@ -130,7 +130,7 @@ namespace ServiceTests
             }
             
             // Assert
-            if (clientStorage._dictionaryClients.Count != 1000)
+            if (clientStorage.Data.Count != 1000)
             {
                 Assert.True(false);
             }

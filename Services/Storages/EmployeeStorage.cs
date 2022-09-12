@@ -7,12 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Services;
-public class EmployeeStorage : IStorage
+public class EmployeeStorage : IEmployeeStorage
 {
-    public readonly List<Employee> _employees = new List<Employee>();
+    private IEmployeeStorage _employeeStorage;
+    public List<Employee> Data { get; }
+    public EmployeeStorage()
+    {
+        Data = new List<Employee>();
+    }
     public void Add(Employee employee)
     {        
-        _employees.Add(employee);
+        Data.Add(employee);
     }        
 
     public void Add()
@@ -20,12 +25,12 @@ public class EmployeeStorage : IStorage
         throw new NotImplementedException();
     }
 
-    public void Delete()
+    public void Delete(Employee employee)
     {
         throw new NotImplementedException();
     }
 
-    public void Update()
+    public void Update(Employee employee)
     {
         throw new NotImplementedException();
     }

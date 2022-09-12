@@ -28,7 +28,7 @@ public class EmployeeService
 
     public List<Employee> GetEmployees(Filter filter)
     {
-        var selection = _employeeStorage._employees.
+        var selection = _employeeStorage.Data.
             Where(e => e.Birthday >= filter.DateFrom).
             Where(e => e.Birthday <= filter.DateBefore);
 
