@@ -1,9 +1,7 @@
-﻿namespace Services;
-using Models;
-using Exceptions;
+﻿using Models;
+namespace Services.Storages;
 public class ClientStorage : IClientStorage
 {
-    private IClientStorage _clientStorage;
     public Dictionary<Client, List<Account>> Data { get; }
     public ClientStorage()
     {
@@ -14,12 +12,12 @@ public class ClientStorage : IClientStorage
         var accountsDefaultList = new List<Account>();
         var accountDefault = new Account();
 
-        var currencyUSD = new Currency();
-        currencyUSD.Name = "USD";
-        currencyUSD.Code = 840;
+        var currencyUsd = new Currency();
+        currencyUsd.Name = "USD";
+        currencyUsd.Code = 840;
 
         accountDefault.Amount = 900;
-        accountDefault.Currency = currencyUSD;
+        accountDefault.Currency = currencyUsd;
 
         accountsDefaultList.Add(accountDefault);
         Data.Add(client, accountsDefaultList);
@@ -40,7 +38,7 @@ public class ClientStorage : IClientStorage
     {
         Data[client].FirstOrDefault(a => 
             (a.Currency.Code == account.Currency.Code) 
-            && (a.Currency.Name == account.Currency.Name)).Amount = account.Amount;
+            && (a.Currency.Name == account.Currency.Name))!.Amount = account.Amount;
     }
     public void DeleteAccount(Client client,Account account)
     {       

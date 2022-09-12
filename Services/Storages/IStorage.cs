@@ -1,5 +1,4 @@
-﻿namespace Services;
-
+﻿namespace Services.Storages;
 public interface IStorage<in T>
 {
     void Add(T item);

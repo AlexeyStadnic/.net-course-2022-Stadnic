@@ -20,7 +20,6 @@ namespace ServiceTests
             Assert.Throws<YoungAgeException>(() => employeeService.AddEmployee(employee));            
         }
 
-
         [Fact]
         public void NoPassportExceptionTest()
         {

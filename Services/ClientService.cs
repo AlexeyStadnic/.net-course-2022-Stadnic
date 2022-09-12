@@ -1,12 +1,12 @@
 ﻿using Models;
 using Services.Exceptions;
-using System.Collections;
+using Services.Storages;
 
 namespace Services;
 
 public class ClientService
 {
-    private IClientStorage _clientStorage;
+    private readonly IClientStorage _clientStorage;
     public ClientService(IClientStorage clientStorage)
     {
         _clientStorage = clientStorage;
@@ -55,6 +55,6 @@ public class ClientService
         if (filter.Passport != 0)
             selection = selection.Where(c => c.Key.Passport == filter.Passport);
 
-        return selection.ToDictionary(c => c.Key, a => a.Value);;
+        return selection.ToDictionary(c => c.Key, a => a.Value);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Models;
 
-namespace Services;
-
+namespace Services.Storages;
 public interface IClientStorage : IStorage<Client>
 {
     public Dictionary<Client,List<Account>> Data { get; }
