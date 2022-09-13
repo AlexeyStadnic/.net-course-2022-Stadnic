@@ -5,5 +5,6 @@ public class Person
     public string Name { get; set; }
     public int Passport { get; set; }
     public string Phone { get; set; }
-    public DateTime Birthday { get; set; }    
+    public DateTime Birthday { get; set; } 
+    public int Bonus { get; set; }
 }

@@ -5,14 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Services.Storages;
 
 namespace Services;
-public class EmployeeStorage : IStorage
-{
-    public readonly List<Employee> _employees = new List<Employee>();
+public class EmployeeStorage : IEmployeeStorage
+{    
+    public List<Employee> Data { get; }
+
+    public EmployeeStorage()
+    {
+        Data = new List<Employee>();
+    }
     public void Add(Employee employee)
     {        
-        _employees.Add(employee);
+        Data.Add(employee);
     }        
 
     public void Add()
@@ -20,12 +26,12 @@ public class EmployeeStorage : IStorage
         throw new NotImplementedException();
     }
 
-    public void Delete()
+    public void Delete(Employee employee)
     {
         throw new NotImplementedException();
     }
 
-    public void Update()
+    public void Update(Employee employee)
     {
         throw new NotImplementedException();
     }
