@@ -9,9 +9,9 @@ using Services.Storages;
 
 namespace Services;
 public class EmployeeStorage : IEmployeeStorage
-{
-    private IEmployeeStorage _employeeStorage;
+{    
     public List<Employee> Data { get; }
+
     public EmployeeStorage()
     {
         Data = new List<Employee>();

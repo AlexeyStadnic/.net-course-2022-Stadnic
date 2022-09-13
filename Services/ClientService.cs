@@ -6,11 +6,13 @@ namespace Services;
 
 public class ClientService
 {
-    private readonly IClientStorage _clientStorage;
+    private IClientStorage _clientStorage;
+
     public ClientService(IClientStorage clientStorage)
     {
         _clientStorage = clientStorage;
     }
+
     public void AddClient(Client client)
     {
         if (DateTime.Today.Year - client.Birthday.Year < 18)

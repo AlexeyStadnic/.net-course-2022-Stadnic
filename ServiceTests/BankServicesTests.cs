@@ -19,10 +19,10 @@ public class BankServicesTests
 
         // Act
         BankService bank = new BankService();
-        bank.AddBonus(client);
+        bank.AddBonus(client);        
 
-        //Assert
-        if (client.Bonus != 1) Assert.True(false);
+        //Assert        
+        Assert.True(client.Bonus == 1);
     }
     
     [Fact]
@@ -40,7 +40,7 @@ public class BankServicesTests
         bank.AddToBlackList(client);
 
         //Assert
-        if (bank.BlackList.Count == 0) Assert.True(false);
+        Assert.True(bank.BlackList.Count != 0);
     }
     
     [Fact]
@@ -57,7 +57,7 @@ public class BankServicesTests
         BankService bank = new BankService();
         bank.AddToBlackList(client);
 
-        //Assert
-        if (!bank.IsPersonInBlackList(client)) Assert.True(false);
+        //Assert        
+        Assert.True(bank.IsPersonInBlackList(client));
     }
 }
