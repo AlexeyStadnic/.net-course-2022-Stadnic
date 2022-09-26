@@ -1,4 +1,4 @@
-﻿using ModelsDB;
+﻿using ModelsDb;
 using Services.Exceptions;
 
 namespace Services;
@@ -11,12 +11,12 @@ public class EmployeeService
         _employeeStorage = employeeStorage;
     }
 
-    public EmployeeDB Get(Guid id)
+    public EmployeeDb Get(Guid id)
     {
         return _employeeStorage.Get(id);
     }
 
-    public void Add(EmployeeDB employee) 
+    public void Add(EmployeeDb employee) 
     {       
         if (DateTime.Today.Year - employee.Birthday.Year < 18)
         {
@@ -31,7 +31,7 @@ public class EmployeeService
         _employeeStorage.Add(employee);
     }
 
-    public void Update(EmployeeDB employee)
+    public void Update(EmployeeDb employee)
     {
         var oldEmployee = Get(employee.Id);
         if (oldEmployee != null)
@@ -44,7 +44,7 @@ public class EmployeeService
         }
     }
 
-    public void Delete(EmployeeDB employee)
+    public void Delete(EmployeeDb employee)
     {
         var oldEmployee = Get(employee.Id);
         if (oldEmployee != null)
@@ -53,7 +53,7 @@ public class EmployeeService
         }
     }
 
-    public List<EmployeeDB> GetEmployees(Filter filter)
+    public List<EmployeeDb> GetEmployees(Filter filter)
     {
         var selection = _employeeStorage.Data.Employees.
             Where(e => e.Birthday >= filter.DateFrom).

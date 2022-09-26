@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceTests", "ServiceTest
 		{613FB945-380B-429F-AF30-9518F268F607} = {613FB945-380B-429F-AF30-9518F268F607}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsDB", "Application\ModelsDB\ModelsDB.csproj", "{613FB945-380B-429F-AF30-9518F268F607}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsDb", "Application\ModelsDB\ModelsDb.csproj", "{613FB945-380B-429F-AF30-9518F268F607}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWithEF", "Tools\PracticeWithEF\PracticeWithEF.csproj", "{4479F087-911B-4B75-B708-B916E4B1931D}"
 	ProjectSection(ProjectDependencies) = postProject

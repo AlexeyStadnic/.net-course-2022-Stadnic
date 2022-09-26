@@ -1,4 +1,4 @@
-﻿using ModelsDB;
+﻿using ModelsDb;
 namespace Services.Storages;
 public class ClientStorage : IClientStorage
 {
@@ -9,9 +9,9 @@ public class ClientStorage : IClientStorage
         Data = new BankContext();
     }
 
-    public void Add(ClientDB client)
+    public void Add(ClientDb client)
     {
-        var defaultAccount = new AccountDB();
+        var defaultAccount = new AccountDb();
         defaultAccount.ClientId = client.Id;
         defaultAccount.Amount = 0;
         var currencys = Data.Currencys.ToList();
@@ -21,36 +21,36 @@ public class ClientStorage : IClientStorage
         Data.SaveChanges();
     }
 
-    public ClientDB Get(Guid id)
+    public ClientDb Get(Guid id)
     {
         return Data.Clients.FirstOrDefault(x => x.Id == id);
     }
 
-    public void Delete(ClientDB client)
+    public void Delete(ClientDb client)
     {
         Data.Clients.Remove(client);
         Data.SaveChanges();
     }
 
-    public void Update(ClientDB client)
+    public void Update(ClientDb client)
     {
         Data.Clients.Update(client);
         Data.SaveChanges();
     }
 
-    public void AddAccount(Guid id, AccountDB account)
+    public void AddAccount(Guid id, AccountDb account)
     {
         account.ClientId = id;
         Data.Accounts.Add(account);
         Data.SaveChanges();
     }
     
-    public void UpdateAccount(Guid id, AccountDB account)
+    public void UpdateAccount(Guid id, AccountDb account)
     {
         
     }
 
-    public void DeleteAccount(Guid id, AccountDB account)
+    public void DeleteAccount(Guid id, AccountDb account)
     {        
         Data.Accounts.Remove(account);
         Data.SaveChanges();

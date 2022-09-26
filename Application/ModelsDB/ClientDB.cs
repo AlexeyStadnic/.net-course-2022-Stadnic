@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsDB
+namespace ModelsDb
 {
     [Table("clients")]
-    public class ClientDB
+    public class ClientDb
     {
         [Column("id")]
         public Guid Id { get; set; }
@@ -17,6 +17,6 @@ namespace ModelsDB
         public DateTime Birthday { get; set; }
         [Column("bonus")]
         public int Bonus { get; set; }
-        public virtual ICollection<AccountDB> Accounts { get; set; }
+        public virtual ICollection<AccountDb> Accounts { get; set; }
     }
 }

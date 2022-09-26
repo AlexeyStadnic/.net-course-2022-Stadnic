@@ -45,7 +45,6 @@ public class TestDataGenerator
             .RuleFor(e => e.Salary, f => f.Random.Int(0,10000))
             .RuleFor(e => e.Contract, f => f.Lorem.Text());
 
-
         for (int i = 0; i < 1000; i++)
         {
             Employee employee = new Employee();

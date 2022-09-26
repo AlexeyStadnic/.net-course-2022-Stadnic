@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsDB
+namespace ModelsDb
 {
     [Table("accounts")]
-    public class AccountDB
+    public class AccountDb
     {
         [Column("id")]
         public Guid Id { get; set; }
@@ -13,10 +13,10 @@ namespace ModelsDB
 
         [Column("currency_id")]
         public Guid CurrencyId { get; set; }
-        public virtual CurrencyDB Currency { get; set; }
+        public virtual CurrencyDb Currency { get; set; }
 
         [Column("client_id")]
         public Guid ClientId { get; set; }
-        public virtual ClientDB Client { get; set; }
+        public virtual ClientDb Client { get; set; }
     }
 }

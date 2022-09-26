@@ -1,5 +1,5 @@
 ﻿using Models;
-using ModelsDB;
+using ModelsDb;
 using Services.Exceptions;
 using Services;
 using Services.Storages;
@@ -14,7 +14,7 @@ namespace ServiceTests
         public void YongAgeExceptionTest()
         {
             // Arrange
-            var client = new ClientDB();
+            var client = new ClientDb();
             client.Birthday = new DateTime(2016, 2, 9);
             var clientStorage = new ClientStorage();
             var clientService = new ClientService(clientStorage);
@@ -27,7 +27,7 @@ namespace ServiceTests
         public void NoPassportExceptionTest()
         {
             // Arrange
-            var client = new ClientDB();
+            var client = new ClientDb();
             var clientStorage = new ClientStorage();
             var clientService = new ClientService(clientStorage);
 
@@ -46,7 +46,7 @@ namespace ServiceTests
             var client = clientService.Get(id);
 
             //Act
-            var accountNew = new AccountDB();
+            var accountNew = new AccountDb();
             accountNew.Id = Guid.NewGuid();
             accountNew.Amount = 1000;
             var currency = clientStorage.Data.Currencys.ToList();
@@ -115,7 +115,7 @@ namespace ServiceTests
             // Act
             foreach (Client client in clients)
             {
-                var clientDB = new ClientDB();
+                var clientDB = new ClientDb();
                 clientDB.Name = client.Name;
                 clientDB.Phone = client.Phone;
                 clientDB.Birthday = client.Birthday;

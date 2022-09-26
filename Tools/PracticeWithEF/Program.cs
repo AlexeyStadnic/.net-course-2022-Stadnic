@@ -1,8 +1,16 @@
-﻿using Services;
+﻿using ModelsDb;
+using Services;
 using Services.Storages;
 
 var clientStorage = new ClientStorage();
 var clientService = new ClientService(clientStorage);
+
+var currency = new CurrencyDb();
+currency.Id = Guid.NewGuid();
+currency.Name = "USD";
+currency.Code = 840;
+clientStorage.Data.Currencys.Add(currency); 
+clientStorage.Data.SaveChanges();
 
 var filter = new Filter();
 filter.Name = "Антонина";

@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ModelsDB;
+using ModelsDb;
 
 namespace Services
 {
     public class BankContext : DbContext
     {
-        public DbSet<ClientDB>? Clients { get; set; }  
-        public DbSet<AccountDB>? Accounts { get; set; }
-        public DbSet<CurrencyDB>? Currencys { get; set; }
-        public DbSet<EmployeeDB>? Employees { get; set; }
+        public DbSet<ClientDb>? Clients { get; set; }  
+        public DbSet<AccountDb>? Accounts { get; set; }
+        public DbSet<CurrencyDb>? Currencys { get; set; }
+        public DbSet<EmployeeDb>? Employees { get; set; }
    
         protected override void OnConfiguring(DbContextOptionsBuilder
         optionsBuilder)

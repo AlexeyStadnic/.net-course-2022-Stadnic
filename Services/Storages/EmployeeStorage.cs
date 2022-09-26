@@ -1,4 +1,4 @@
-﻿using ModelsDB;
+﻿using ModelsDb;
 using Services.Storages;
 
 namespace Services;
@@ -12,24 +12,24 @@ public class EmployeeStorage : IEmployeeStorage
         Data = new BankContext();
     }
     
-    public void Add(EmployeeDB employee)
+    public void Add(EmployeeDb employee)
     {
         Data.Employees.Add(employee);
         Data.SaveChanges();
     }
 
-    public EmployeeDB Get(Guid id)
+    public EmployeeDb Get(Guid id)
     {
         return Data.Employees.FirstOrDefault(x => x.Id == id);
     }
     
-    public void Delete(EmployeeDB employee)
+    public void Delete(EmployeeDb employee)
     {
         Data.Employees.Remove(employee);
         Data.SaveChanges();
     }
 
-    public void Update(EmployeeDB employee)
+    public void Update(EmployeeDb employee)
     {
         Data.Employees.Update(employee);
         Data.SaveChanges();

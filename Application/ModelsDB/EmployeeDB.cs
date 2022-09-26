@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsDB
+namespace ModelsDb
 {
     [Table("employees")]
-    public class EmployeeDB
+    public class EmployeeDb
     {
         [Column("id")]
         public Guid Id { get; set; }

@@ -1,4 +1,5 @@
-﻿using ModelsDB;
+﻿using ModelsDb;
+using Models;
 using Services.Exceptions;
 using Services.Storages;
 
@@ -13,7 +14,7 @@ public class ClientService
         _clientStorage = clientStorage;
     }
 
-    public void Add(ClientDB client)
+    public void Add(ClientDb client)
     {
         if (DateTime.Today.Year - client.Birthday.Year < 18)
         {
@@ -28,18 +29,18 @@ public class ClientService
         _clientStorage.Add(client);
     }
 
-    public ClientDB Get(Guid id)
+    public ClientDb Get(Guid id)
     {        
         return _clientStorage.Get(id);
     }
-    public void AddAccount(Guid id, AccountDB account)
+    public void AddAccount(Guid id, AccountDb account)
     {        
         var accounts = _clientStorage.Data.Accounts.Where(x => x.CurrencyId == account.CurrencyId).ToList();
         if (accounts.Count == 0) _clientStorage.AddAccount(id, account);
         else throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
     }
 
-    public void DeleteAccount(Guid id, AccountDB account)
+    public void DeleteAccount(Guid id, AccountDb account)
     {
         var accounts = _clientStorage.Data.Accounts.Where(x => x.ClientId == id).ToList();
         if (accounts.Contains(account))
@@ -49,7 +50,7 @@ public class ClientService
         else throw new NoSuchAccountException("Ошибка. У клиента нет такого счета.");
     }
 
-    public void Update(ClientDB client)
+    public void Update(ClientDb client)
     {
         var oldClient = Get(client.Id);
         if (oldClient != null)
@@ -62,7 +63,7 @@ public class ClientService
         }        
     }
 
-    public void Delete(ClientDB client)
+    public void Delete(ClientDb client)
     {
         var oldClient = Get(client.Id);
         if (oldClient != null)
@@ -71,7 +72,7 @@ public class ClientService
         }        
     }
 
-    public List<ClientDB> GetClients(Filter filter)
+    public List<ClientDb> GetClients(Filter filter)
     {
         var selection = _clientStorage.Data.Clients.
             Where(c => c.Birthday >= filter.DateFrom).

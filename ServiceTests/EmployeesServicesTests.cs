@@ -1,4 +1,4 @@
-﻿using ModelsDB;
+﻿using ModelsDb;
 using Models;
 using Services.Exceptions;
 using Services;
@@ -13,7 +13,7 @@ namespace ServiceTests
         public void YongAgeExceptionTest()
         {
             // Arrange
-            var employee = new EmployeeDB();
+            var employee = new EmployeeDb();
             employee.Birthday = new DateTime(2016, 2, 9);
             var employeeStorage = new EmployeeStorage();
             var employeeService = new EmployeeService(employeeStorage);
@@ -26,7 +26,7 @@ namespace ServiceTests
         public void NoPassportExceptionTest()
         {
             // Arrange
-            var employee = new EmployeeDB();
+            var employee = new EmployeeDb();
             var employeeStorage = new EmployeeStorage();
             var employeeService = new EmployeeService(employeeStorage);
 
@@ -64,7 +64,7 @@ namespace ServiceTests
             // Act
             foreach (Employee employee in employees)
             {
-                var employeeDB = new EmployeeDB();
+                var employeeDB = new EmployeeDb();
                 employeeDB.Name = employee.Name;
                 employeeDB.Phone = employee.Phone;
                 employeeDB.Birthday = employee.Birthday;
