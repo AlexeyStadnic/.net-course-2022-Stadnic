@@ -1,12 +1,19 @@
 ﻿using Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsDB
 {
+    [Table("accounts")]
     public class AccountDB
     {
+        [Column("id")]
         public Guid Id { get; set; }
+        [Column("amount")]
         public int Amount { get; set; }
-        public Currency Currency { get; set; }
-        public Guid ClientID { get; set; }
+        [Column("currency_id")]
+        public Guid CurrencyId { get; set; }
+
+        [Column("client_id")]
+        public Guid ClientId { get; set; }
     }
 }

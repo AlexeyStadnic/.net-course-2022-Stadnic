@@ -16,6 +16,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{68516DFA-9663-43F0-8F5D-D4F21F7CECE3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D} = {3293480B-3D47-4DC8-BEC3-12EA1EB0EE9D}
+		{613FB945-380B-429F-AF30-9518F268F607} = {613FB945-380B-429F-AF30-9518F268F607}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWithListDictionary", "PracticeWithListDictionary\PracticeWithListDictionary.csproj", "{67862A47-FF20-407D-AA7D-FC6766A445EC}"
@@ -25,10 +26,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWithListDictionary"
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceTests", "ServiceTests\ServiceTests.csproj", "{0E95144D-7F49-4D85-B4D4-98C51107C3E3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{613FB945-380B-429F-AF30-9518F268F607} = {613FB945-380B-429F-AF30-9518F268F607}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsDB", "Application\ModelsDB\ModelsDB.csproj", "{613FB945-380B-429F-AF30-9518F268F607}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsDB", "Application\ModelsDB\ModelsDB.csproj", "{613FB945-380B-429F-AF30-9518F268F607}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeWithEF", "Tools\PracticeWithEF\PracticeWithEF.csproj", "{4479F087-911B-4B75-B708-B916E4B1931D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWithEF", "Tools\PracticeWithEF\PracticeWithEF.csproj", "{4479F087-911B-4B75-B708-B916E4B1931D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{613FB945-380B-429F-AF30-9518F268F607} = {613FB945-380B-429F-AF30-9518F268F607}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

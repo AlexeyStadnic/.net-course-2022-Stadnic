@@ -1,12 +1,21 @@
-﻿namespace ModelsDB
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ModelsDB
 {
-    internal class ClientDB
+    [Table("clients")]
+    public class ClientDB
     {
+        [Column("id")]
         public Guid Id { get; set; }
+        [Column("name")]
         public string? Name { get; set; }
+        [Column("passport")]
         public int Passport { get; set; }
+        [Column("phone")]
         public string? Phone { get; set; }
+        [Column("birthday")]
         public DateTime Birthday { get; set; }
-        public int Bonus { get; set; }
+        [Column("bonus")]
+        public int Bonus { get; set; }        
     }
 }

@@ -1,46 +1,49 @@
-﻿using Models;
+﻿using ModelsDB;
 namespace Services.Storages;
 public class ClientStorage : IClientStorage
 {
-    public Dictionary<Client, List<Account>> Data { get; }
+    public BankContext Data { get; }
     public ClientStorage()
     {
-        Data = new Dictionary<Client, List<Account>>();
+        Data = new BankContext();
     }
-    public void Add(Client client)
+    public void Add(ClientDB client)
     {
-        var accountsDefaultList = new List<Account>();
-        var accountDefault = new Account();
-
-        var currencyUsd = new Currency();
-        currencyUsd.Name = "USD";
-        currencyUsd.Code = 840;
-
-        accountDefault.Amount = 900;
-        accountDefault.Currency = currencyUsd;
-
-        accountsDefaultList.Add(accountDefault);
-        Data.Add(client, accountsDefaultList);
+        var defaultAccount = new AccountDB();
+        defaultAccount.ClientId = client.Id;
+        defaultAccount.Amount = 0;
+        var currencys = Data.Currencys.ToList();
+        defaultAccount.CurrencyId = currencys[0].Id;
+        Data.Clients.Add(client);
+        Data.Accounts.Add(defaultAccount);
+        Data.SaveChanges();
     }
-    public void Delete(Client client)
+    public ClientDB Get(Guid id)
+    {
+        return Data.Clients.FirstOrDefault(x => x.Id == id);
+    }
+
+    public void Delete(ClientDB client)
     {
         
     }
-    public void Update(Client client)
+    public void Update(ClientDB client)
     {
         
     }
-    public void AddAccount(Client client,Account account)
-    {       
-        Data[client].Add(account);        
-    }
-    public void UpdateAccount(Client client, Account account)
+    public void AddAccount(Guid id, AccountDB account)
     {
-        Data[client].FirstOrDefault(a => 
+        account.ClientId = id;
+        Data.Accounts.Add(account);
+        Data.SaveChanges();
+    }
+    public void UpdateAccount(ClientDB client, AccountDB account)
+    {
+        /*Data[client].FirstOrDefault(a => 
             (a.Currency.Code == account.Currency.Code) 
-            && (a.Currency.Name == account.Currency.Name))!.Amount = account.Amount;
+            && (a.Currency.Name == account.Currency.Name))!.Amount = account.Amount;*/
     }
-    public void DeleteAccount(Client client,Account account)
+    public void DeleteAccount(ClientDB client,AccountDB account)
     {       
                
     }

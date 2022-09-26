@@ -1,10 +1,11 @@
-﻿using Models;
+﻿using ModelsDB;
 
 namespace Services.Storages;
-public interface IClientStorage : IStorage<Client>
-{
-    public Dictionary<Client,List<Account>> Data { get; }
-    void AddAccount(Client client, Account account);
-    void DeleteAccount(Client client, Account account);
-    void UpdateAccount(Client client, Account account);
+public interface IClientStorage : IStorage<ClientDB>
+{    
+    public BankContext Data { get; }
+    void AddAccount(Guid id, AccountDB account);
+    ClientDB Get(Guid id);
+    /*void DeleteAccount(ClientDB client, AccountDB account);
+    void UpdateAccount(Client client, Account account);*/
 }

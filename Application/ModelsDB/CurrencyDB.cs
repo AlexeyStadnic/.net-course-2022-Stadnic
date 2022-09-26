@@ -1,10 +1,15 @@
-﻿namespace ModelsDB
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ModelsDB
 {
-    internal class CurrencyDB
+    [Table("currencys")]
+    public class CurrencyDB
     {
+        [Column("id")]
         public Guid Id { get; set; }
+        [Column("name")]
         public string? Name { get; set; }
-        public int Code { get; set; }
-        public Guid AccountID { get; set; }
+        [Column("code")]
+        public int Code { get; set; }        
     }
 }

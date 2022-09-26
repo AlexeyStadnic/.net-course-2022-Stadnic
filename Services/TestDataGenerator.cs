@@ -18,7 +18,7 @@ public class TestDataGenerator
             .RuleFor(c => c.Phone, f => f.Phone.PhoneNumberFormat())
             .RuleFor(c => c.Birthday, f => f.Date.Between(dateStart,dateEnd));  
         
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 5; i++)
         {
             Client client = new Client();
             client.Name = testClient.Generate().Name;

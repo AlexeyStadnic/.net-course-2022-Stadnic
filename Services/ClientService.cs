@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using ModelsDB;
+using Models;
 using Services.Exceptions;
 using Services.Storages;
 
@@ -11,7 +12,7 @@ public class ClientService
     {
         _clientStorage = clientStorage;
     }
-    public void AddClient(Client client)
+    public void Add(ClientDB client)
     {
         if (DateTime.Today.Year - client.Birthday.Year < 18)
         {
@@ -21,26 +22,28 @@ public class ClientService
         if (client.Passport == 0)
         {
             throw new NoPassportException("Ошибка. У клиента отсутствует паспорт.");
-        }
+        }      
+
         _clientStorage.Add(client);
     }
-    
-    public void AddAccount(Client client,Account account)
-    {       
-        var accountsOfClient = _clientStorage.Data[client];
-        if (accountsOfClient.Contains(account))
-        {
-            throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
-        }
-        _clientStorage.AddAccount(client,account);
+
+    public ClientDB Get(Guid id)
+    {        
+        return _clientStorage.Get(id);
+    }
+    public void AddAccount(Guid id, AccountDB account)
+    {        
+        var accounts = _clientStorage.Data.Accounts.Where(x => x.CurrencyId == account.CurrencyId).ToList();
+        if (accounts.Count == 0) _clientStorage.AddAccount(id, account);
+        else throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
     }
 
-    public void UpdateAccount(Client client, Account account)
+    /*public void UpdateAccount(Client client, Account account)
     {
         _clientStorage.UpdateAccount(client, account);
-    }
+    }*/
 
-    public Dictionary<Client, List<Account>> GetClients(Filter filter)
+    /*public Dictionary<Client, List<Account>> GetClients(Filter filter)
     {
         var selection = _clientStorage.Data.
             Where(c => c.Key.Birthday >= filter.DateFrom).
@@ -56,5 +59,5 @@ public class ClientService
             selection = selection.Where(c => c.Key.Passport == filter.Passport);
 
         return selection.ToDictionary(c => c.Key, a => a.Value);
-    }
+    }*/
 }
