@@ -12,8 +12,8 @@ using Services;
 namespace PracticeWithEF.Migrations
 {
     [DbContext(typeof(BankContext))]
-    [Migration("20220925222809_Initial")]
-    partial class Initial
+    [Migration("20220926075106_AddFKClientId")]
+    partial class AddFKClientId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,9 @@ namespace PracticeWithEF.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("amount");
 
+                    b.Property<Guid>("ClientDBId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid")
                         .HasColumnName("client_id");
@@ -44,6 +47,8 @@ namespace PracticeWithEF.Migrations
                         .HasColumnName("currency_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientDBId");
 
                     b.ToTable("accounts");
                 });
@@ -138,6 +143,22 @@ namespace PracticeWithEF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("employees");
+                });
+
+            modelBuilder.Entity("ModelsDB.AccountDB", b =>
+                {
+                    b.HasOne("ModelsDB.ClientDB", "ClientDB")
+                        .WithMany("Accounts")
+                        .HasForeignKey("ClientDBId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClientDB");
+                });
+
+            modelBuilder.Entity("ModelsDB.ClientDB", b =>
+                {
+                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

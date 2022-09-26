@@ -25,11 +25,13 @@ public class ClientStorage : IClientStorage
 
     public void Delete(ClientDB client)
     {
-        
+        Data.Clients.Remove(client);
+        Data.SaveChanges();
     }
     public void Update(ClientDB client)
     {
-        
+        Data.Clients.Update(client);
+        Data.SaveChanges();
     }
     public void AddAccount(Guid id, AccountDB account)
     {
@@ -37,14 +39,13 @@ public class ClientStorage : IClientStorage
         Data.Accounts.Add(account);
         Data.SaveChanges();
     }
-    public void UpdateAccount(ClientDB client, AccountDB account)
+    public void UpdateAccount(Guid id, AccountDB account)
     {
-        /*Data[client].FirstOrDefault(a => 
-            (a.Currency.Code == account.Currency.Code) 
-            && (a.Currency.Name == account.Currency.Name))!.Amount = account.Amount;*/
+        
     }
-    public void DeleteAccount(ClientDB client,AccountDB account)
-    {       
-               
+    public void DeleteAccount(Guid id, AccountDB account)
+    {        
+        Data.Accounts.Remove(account);
+        Data.SaveChanges();
     }
 }

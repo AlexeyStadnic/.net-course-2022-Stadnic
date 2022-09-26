@@ -35,7 +35,7 @@ namespace ServiceTests
             Assert.Throws<NoPassportException>(() => clientService.Add(client));
         }                
         
-        /*[Fact]
+        [Fact]
         public void AccountAlreadyExistsExceptionTest()
         {
             // Arrange           
@@ -60,9 +60,9 @@ namespace ServiceTests
             { 
                 Assert.True(true); 
             }
-        }*/
+        }
 
-        /*[Fact]
+        [Fact]
         public void GetPositiveTest()
         {
             // Arrange      
@@ -74,58 +74,33 @@ namespace ServiceTests
             Guid id = clients[0].Id;
             var client = clientService.Get(id);
 
-            // Assert
-            if (client.Equals(clients[1]))
-            {
-                Assert.True(false);
-            }
-        }*/
+            // Assert       
+            Assert.True(client.Equals(clients[0]));
+            
+        }
 
-
-        /*[Fact]
+        [Fact]
         public void NoSuchAccountExceptionTest()
         {
             // Arrange
-            var client = new ClientDB();
-            client.Name = "Алексей";
-            client.Birthday = new DateTime(1986, 2, 9);
-            client.Phone = "77881886";
-            client.Passport = 14714;
-            
             var clientStorage = new ClientStorage();
             var clientService = new ClientService(clientStorage);
+            var clients = clientStorage.Data.Clients.ToList();
+            Guid id = clients[0].Id;
 
-            //Act
-            clientService.Add(client);
-            
-            var account = new AccountDB();
-            
-            var currencyEur = new CurrencyDB();
-            currencyEur.Name = "EUR";
-            currencyEur.Code = 978;
+            // Act
+            var account = clientStorage.Data.Accounts.FirstOrDefault(x => x.ClientId == id);
 
-            account.Amount = 1000;
-            
-
-            clientService.AddAccount(client.Id,account);
-
-            var accountNew = new AccountDB();      
-            accountNew.Amount = 12125;
-            accountNew.Currency = currencyEur;
-
+            // Assert
             try
             {
-                clientService.UpdateAccount(client, accountNew);
+                clientService.DeleteAccount(id, account);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (NoSuchAccountException e)
             {
-                Assert.True(false);
+                Assert.True(true);
             }
-            catch (NullReferenceException e)
-            {
-                Assert.True(false);
-            }
-        }*/
+        }
 
         [Fact]
         public void AddPositiveTest()
@@ -153,44 +128,73 @@ namespace ServiceTests
             }
             clientStorage.Data.SaveChanges();
             
-            // Assert
-            if (i == 1000)
-            {
-                Assert.True(true);
-            }
+            // Assert            
+            Assert.True(i == 5);            
         }
 
-        /*[Fact]
+        [Fact]
+        public void UpdatePositiveTest()
+        {
+            // Arrange      
+            var clientStorage = new ClientStorage();
+            var clientService = new ClientService(clientStorage);
+            var clients = clientStorage.Data.Clients.ToList();
+            Guid id = clients[0].Id;
+            var client = clientService.Get(id);
+            client.Name = "Жорик";
+
+            // Act
+            clientService.Update(client);
+            clientStorage.Data.SaveChanges();
+
+            // Assert            
+            Assert.True(clientService.Get(id).Name == client.Name);
+        }
+
+        [Fact]
+        public void DeletePositiveTest()
+        {
+            // Arrange      
+            var clientStorage = new ClientStorage();
+            var clientService = new ClientService(clientStorage);
+            var clients = clientStorage.Data.Clients.ToList();
+            Guid id = clients[0].Id;
+            var client = clientService.Get(id);            
+
+            // Act
+            clientService.Delete(client);
+            clientStorage.Data.SaveChanges();
+
+            // Assert            
+            Assert.True(clientService.Get(id) == null);
+        }
+
+        [Fact]
         public void SelectClientPositiveTest()
         {
             // Arrange      
-
             var clientStorage = new ClientStorage();
-            var clientService = new ClientService(clientStorage);
-            TestDataGenerator testDataGenerator = new TestDataGenerator();
-            List<Client> clients = testDataGenerator.GenerateThousandClients();
-            var filter = new Filter();
-            filter.Name = "Алексей";
-            filter.DateFrom = DateTime.Today.AddYears(-60);
-            filter.DateBefore = DateTime.Today;
+            var clientService = new ClientService(clientStorage);            
             
-            foreach (Client client in clients)
-            {
-                clientService.AddClient(client);
-            }
+            var filter = new Filter();
+            filter.Name = "Антонина";
+            filter.DateFrom = DateTime.Today.AddYears(-60);
+            filter.DateFrom = DateTime.SpecifyKind(filter.DateFrom, DateTimeKind.Utc);
+            filter.DateBefore = DateTime.Today;
+            filter.DateBefore = DateTime.SpecifyKind(filter.DateBefore, DateTimeKind.Utc);
 
             // Act
-            DateTime youngClientBirthday = clientService.GetClients(filter).Max(c => c.Key.Birthday);
+            DateTime youngClientBirthday = clientService.GetClients(filter).Max(c => c.Birthday);
             var youngClient = clientService.GetClients(filter).
-                FirstOrDefault(c => c.Key.Birthday.Equals(youngClientBirthday));
-            
+                FirstOrDefault(c => c.Birthday.Equals(youngClientBirthday));
 
-            DateTime oldClientBirthday = clientService.GetClients(filter).Min(c => c.Key.Birthday);
+
+            DateTime oldClientBirthday = clientService.GetClients(filter).Min(c => c.Birthday);
             var oldClient = clientService.GetClients(filter).
-                FirstOrDefault(c => c.Key.Birthday.Equals(oldClientBirthday));
+                FirstOrDefault(c => c.Birthday.Equals(oldClientBirthday));
 
             double averageAgeClient = clientService.GetClients(filter).
-                Average(c => (DateTime.Now.Year - c.Key.Birthday.Year));
+                Average(c => (DateTime.Now.Year - c.Birthday.Year));
 
             // Assert
             if (averageAgeClient > 18)
@@ -200,7 +204,7 @@ namespace ServiceTests
             else
             {
                 Assert.True(false);
-            }            
-        }*/
+            }
+        }
     }
 }

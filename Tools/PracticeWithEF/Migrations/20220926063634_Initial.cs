@@ -40,19 +40,6 @@ namespace PracticeWithEF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "currencys",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: true),
-                    code = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_currencys", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "employees",
                 columns: table => new
                 {
@@ -78,9 +65,6 @@ namespace PracticeWithEF.Migrations
 
             migrationBuilder.DropTable(
                 name: "clients");
-
-            migrationBuilder.DropTable(
-                name: "currencys");
 
             migrationBuilder.DropTable(
                 name: "employees");

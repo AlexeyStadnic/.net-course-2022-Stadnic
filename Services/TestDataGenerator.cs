@@ -18,7 +18,7 @@ public class TestDataGenerator
             .RuleFor(c => c.Phone, f => f.Phone.PhoneNumberFormat())
             .RuleFor(c => c.Birthday, f => f.Date.Between(dateStart,dateEnd));  
         
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1000; i++)
         {
             Client client = new Client();
             client.Name = testClient.Generate().Name;
@@ -42,8 +42,10 @@ public class TestDataGenerator
             .RuleFor(e => e.Passport, f => f.Random.Int(1, 9999999))
             .RuleFor(e => e.Phone, f => f.Phone.PhoneNumberFormat())
             .RuleFor(e => e.Birthday, f => f.Date.Between(dateStart,dateEnd))
-            .RuleFor(e => e.Salary, f => f.Random.Int(0,10000));
-        
+            .RuleFor(e => e.Salary, f => f.Random.Int(0,10000))
+            .RuleFor(e => e.Contract, f => f.Lorem.Text());
+
+
         for (int i = 0; i < 1000; i++)
         {
             Employee employee = new Employee();
@@ -52,6 +54,7 @@ public class TestDataGenerator
             employee.Phone = testEmployee.Generate().Phone;
             employee.Birthday = testEmployee.Generate().Birthday;
             employee.Salary = testEmployee.Generate().Salary;
+            employee.Contract = testEmployee.Generate().Contract;
             employees.Add(employee);
         }
         return employees;

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Services;
@@ -11,9 +12,10 @@ using Services;
 namespace PracticeWithEF.Migrations
 {
     [DbContext(typeof(BankContext))]
-    partial class BankContextModelSnapshot : ModelSnapshot
+    [Migration("20220926063634_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,10 +44,6 @@ namespace PracticeWithEF.Migrations
                         .HasColumnName("currency_id");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("CurrencyId");
 
                     b.ToTable("accounts");
                 });
@@ -80,26 +78,6 @@ namespace PracticeWithEF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("clients");
-                });
-
-            modelBuilder.Entity("ModelsDB.CurrencyDB", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<int>("Code")
-                        .HasColumnType("integer")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("currencys");
                 });
 
             modelBuilder.Entity("ModelsDB.EmployeeDB", b =>
@@ -140,35 +118,6 @@ namespace PracticeWithEF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("employees");
-                });
-
-            modelBuilder.Entity("ModelsDB.AccountDB", b =>
-                {
-                    b.HasOne("ModelsDB.ClientDB", "Client")
-                        .WithMany("Accounts")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelsDB.CurrencyDB", "Currency")
-                        .WithMany("Accounts")
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Currency");
-                });
-
-            modelBuilder.Entity("ModelsDB.ClientDB", b =>
-                {
-                    b.Navigation("Accounts");
-                });
-
-            modelBuilder.Entity("ModelsDB.CurrencyDB", b =>
-                {
-                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

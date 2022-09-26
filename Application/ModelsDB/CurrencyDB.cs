@@ -10,6 +10,7 @@ namespace ModelsDB
         [Column("name")]
         public string? Name { get; set; }
         [Column("code")]
-        public int Code { get; set; }        
+        public int Code { get; set; }
+        public virtual ICollection<AccountDB> Accounts { get; set; }
     }
 }

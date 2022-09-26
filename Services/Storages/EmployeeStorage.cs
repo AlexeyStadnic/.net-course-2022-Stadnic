@@ -1,38 +1,35 @@
-﻿using Models;
-using Services.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ModelsDB;
 using Services.Storages;
 
 namespace Services;
 public class EmployeeStorage : IEmployeeStorage
 {
-    private IEmployeeStorage _employeeStorage;
-    public List<Employee> Data { get; }
+    public BankContext Data { get; }
+
     public EmployeeStorage()
     {
-        Data = new List<Employee>();
+        Data = new BankContext();
     }
-    public void Add(Employee employee)
-    {        
-        Data.Add(employee);
-    }        
-
-    public void Add()
+    
+    public void Add(EmployeeDB employee)
     {
-        throw new NotImplementedException();
+        Data.Employees.Add(employee);
+        Data.SaveChanges();
     }
 
-    public void Delete(Employee employee)
+    public EmployeeDB Get(Guid id)
     {
-        throw new NotImplementedException();
+        return Data.Employees.FirstOrDefault(x => x.Id == id);
+    }
+    public void Delete(EmployeeDB employee)
+    {
+        Data.Employees.Remove(employee);
+        Data.SaveChanges();
     }
 
-    public void Update(Employee employee)
+    public void Update(EmployeeDB employee)
     {
-        throw new NotImplementedException();
+        Data.Employees.Update(employee);
+        Data.SaveChanges();
     }
 }

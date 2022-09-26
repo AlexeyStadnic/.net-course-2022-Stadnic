@@ -1,5 +1,4 @@
 ﻿using ModelsDB;
-using Models;
 using Services.Exceptions;
 using Services.Storages;
 
@@ -38,26 +37,53 @@ public class ClientService
         else throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
     }
 
-    /*public void UpdateAccount(Client client, Account account)
+    public void DeleteAccount(Guid id, AccountDB account)
     {
-        _clientStorage.UpdateAccount(client, account);
-    }*/
+        var accounts = _clientStorage.Data.Accounts.Where(x => x.ClientId == id).ToList();
+        if (accounts.Contains(account))
+        {
+            _clientStorage.DeleteAccount(id, account);
+        } 
+        else throw new NoSuchAccountException("Ошибка. У клиента нет такого счета.");
+    }
 
-    /*public Dictionary<Client, List<Account>> GetClients(Filter filter)
+    public void Update(ClientDB client)
     {
-        var selection = _clientStorage.Data.
-            Where(c => c.Key.Birthday >= filter.DateFrom).
-            Where(c => c.Key.Birthday <= filter.DateBefore);
+        var oldClient = Get(client.Id);
+        if (oldClient != null)
+        {
+            oldClient.Name = client.Name;
+            oldClient.Phone = client.Phone;
+            oldClient.Birthday = client.Birthday;
+            oldClient.Bonus = client.Bonus;
+            _clientStorage.Update(oldClient);
+        }        
+    }
+
+    public void Delete(ClientDB client)
+    {
+        var oldClient = Get(client.Id);
+        if (oldClient != null)
+        {
+            _clientStorage.Delete(oldClient);
+        }        
+    }
+
+    public List<ClientDB> GetClients(Filter filter)
+    {
+        var selection = _clientStorage.Data.Clients.
+            Where(c => c.Birthday >= filter.DateFrom).
+            Where(c => c.Birthday <= filter.DateBefore);
 
         if (filter.Name != null)
-            selection = selection.Where(c => c.Key.Name == filter.Name);
+            selection = selection.Where(c => c.Name == filter.Name);
 
         if (filter.Phone != null)
-            selection = selection.Where(c => c.Key.Phone == filter.Phone);
+            selection = selection.Where(c => c.Phone == filter.Phone);
 
         if (filter.Passport != 0)
-            selection = selection.Where(c => c.Key.Passport == filter.Passport);
-
-        return selection.ToDictionary(c => c.Key, a => a.Value);
-    }*/
+            selection = selection.Where(c => c.Passport == filter.Passport);
+        
+        return selection.ToList();
+    }
 }

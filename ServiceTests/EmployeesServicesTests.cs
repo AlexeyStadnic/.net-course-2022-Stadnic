@@ -1,7 +1,9 @@
-﻿using Models;
+﻿using ModelsDB;
+using Models;
 using Services.Exceptions;
 using Services;
 using Xunit;
+using Services.Storages;
 
 namespace ServiceTests
 {
@@ -11,68 +13,126 @@ namespace ServiceTests
         public void YongAgeExceptionTest()
         {
             // Arrange
-            var employee = new Employee();
+            var employee = new EmployeeDB();
             employee.Birthday = new DateTime(2016, 2, 9);
             var employeeStorage = new EmployeeStorage();
             var employeeService = new EmployeeService(employeeStorage);
 
             // Act/Assert            
-            Assert.Throws<YoungAgeException>(() => employeeService.AddEmployee(employee));            
+            Assert.Throws<YoungAgeException>(() => employeeService.Add(employee));            
         }
 
         [Fact]
         public void NoPassportExceptionTest()
         {
             // Arrange
-            var employee = new Employee();
+            var employee = new EmployeeDB();
             var employeeStorage = new EmployeeStorage();
             var employeeService = new EmployeeService(employeeStorage);
 
             // Act/Assert            
-            Assert.Throws<NoPassportException>(() => employeeService.AddEmployee(employee));
+            Assert.Throws<NoPassportException>(() => employeeService.Add(employee));
+        }
+
+        [Fact]
+        public void GetPositiveTest()
+        {
+            // Arrange      
+            var employeeStorage = new EmployeeStorage();
+            var employeeService = new EmployeeService(employeeStorage);
+
+            // Act
+            var employees = employeeStorage.Data.Employees.ToList();
+            Guid id = employees[0].Id;
+            var employee = employeeService.Get(id);
+
+            // Assert       
+            Assert.True(employee.Equals(employees[0]));
+
         }
 
         [Fact]
         public void AddPositiveTest()
         {
-            // Arrange      
-
+            // Arrange
             var employeeStorage = new EmployeeStorage();
             var employeeService = new EmployeeService(employeeStorage);
             TestDataGenerator testDataGenerator = new TestDataGenerator();
             List<Employee> employees = testDataGenerator.GenerateThousandEmployees();
+            int i = 0;
 
             // Act
             foreach (Employee employee in employees)
-            {                
-                employeeService.AddEmployee(employee);
-            }
-
-            // Assert
-            if (employeeStorage.Data.Count != 1000)
             {
-                Assert.True(false);
+                var employeeDB = new EmployeeDB();
+                employeeDB.Name = employee.Name;
+                employeeDB.Phone = employee.Phone;
+                employeeDB.Birthday = employee.Birthday;
+                employeeDB.Birthday = DateTime.SpecifyKind(employeeDB.Birthday, DateTimeKind.Utc);
+                employeeDB.Id = Guid.NewGuid();
+                employeeDB.Bonus = employee.Bonus;
+                employeeDB.Passport = employee.Passport;
+                employeeDB.Contract = employee.Contract;
+                employeeDB.Salary = employee.Salary;
+                employeeService.Add(employeeDB);
+                i++;
             }
+            employeeStorage.Data.SaveChanges();
+
+            // Assert            
+            Assert.True(i == 1000);
+        }
+
+        [Fact]
+        public void UpdatePositiveTest()
+        {
+            // Arrange      
+            var employeeStorage = new EmployeeStorage();
+            var employeeService = new EmployeeService(employeeStorage);
+            var employees = employeeStorage.Data.Employees.ToList();
+            Guid id = employees[0].Id;
+            var employee = employeeService.Get(id);
+            employee.Name = "Жорик";
+
+            // Act
+            employeeService.Update(employee);
+            employeeStorage.Data.SaveChanges();
+
+            // Assert            
+            Assert.True(employeeService.Get(id).Name == employee.Name);
+        }
+
+        [Fact]
+        public void DeletePositiveTest()
+        {
+            // Arrange      
+            var employeeStorage = new EmployeeStorage();
+            var employeeService = new EmployeeService(employeeStorage);
+            var employees = employeeStorage.Data.Employees.ToList();
+            Guid id = employees[0].Id;
+            var employee = employeeService.Get(id);
+
+            // Act
+            employeeService.Delete(employee);
+            employeeStorage.Data.SaveChanges();
+
+            // Assert            
+            Assert.True(employeeService.Get(id) == null);
         }
 
         [Fact]
         public void SelectEmployeePositiveTest()
         {
-            // Arrange      
-
+            // Arrange   
             var employeeStorage = new EmployeeStorage();
-            var employeeService = new EmployeeService(employeeStorage);
-            TestDataGenerator testDataGenerator = new TestDataGenerator();
-            List<Employee> employees = testDataGenerator.GenerateThousandEmployees();
+            var employeeService = new EmployeeService(employeeStorage);            
+            
             var filter = new Filter();
             filter.Name = "Алексей";
             filter.DateFrom = DateTime.Today.AddYears(-60);
+            filter.DateFrom = DateTime.SpecifyKind(filter.DateFrom, DateTimeKind.Utc);
             filter.DateBefore = DateTime.Today;
-
-            foreach (Employee employee in employees)
-            {
-                employeeService.AddEmployee(employee);
-            }
+            filter.DateBefore = DateTime.SpecifyKind(filter.DateBefore, DateTimeKind.Utc);
 
             // Act
             DateTime youngEmployeeBirthday = employeeService.GetEmployees(filter).Max(e => e.Birthday);

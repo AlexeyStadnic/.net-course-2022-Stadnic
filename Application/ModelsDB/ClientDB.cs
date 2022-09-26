@@ -16,6 +16,7 @@ namespace ModelsDB
         [Column("birthday")]
         public DateTime Birthday { get; set; }
         [Column("bonus")]
-        public int Bonus { get; set; }        
+        public int Bonus { get; set; }
+        public virtual ICollection<AccountDB> Accounts { get; set; }
     }
 }
