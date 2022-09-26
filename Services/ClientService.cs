@@ -14,7 +14,7 @@ public class ClientService
         _clientStorage = clientStorage;
     }
 
-    public void Add(ClientDb client)
+    public void Add(Client client)
     {
         if (DateTime.Today.Year - client.Birthday.Year < 18)
         {
@@ -24,55 +24,36 @@ public class ClientService
         if (client.Passport == 0)
         {
             throw new NoPassportException("Ошибка. У клиента отсутствует паспорт.");
-        }      
+        }     
 
         _clientStorage.Add(client);
     }
 
-    public ClientDb Get(Guid id)
+    public Client Get(Guid id)
     {        
         return _clientStorage.Get(id);
     }
-    public void AddAccount(Guid id, AccountDb account)
+    public void AddAccount(Client client, Account account)
+    {       
+        _clientStorage.AddAccount(client, account);
+    }
+
+    public void DeleteAccount(Client client, Account account)
     {        
-        var accounts = _clientStorage.Data.Accounts.Where(x => x.CurrencyId == account.CurrencyId).ToList();
-        if (accounts.Count == 0) _clientStorage.AddAccount(id, account);
-        else throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
+        _clientStorage.DeleteAccount(client, account);
     }
 
-    public void DeleteAccount(Guid id, AccountDb account)
-    {
-        var accounts = _clientStorage.Data.Accounts.Where(x => x.ClientId == id).ToList();
-        if (accounts.Contains(account))
-        {
-            _clientStorage.DeleteAccount(id, account);
-        } 
-        else throw new NoSuchAccountException("Ошибка. У клиента нет такого счета.");
+    public void Update(Client client)
+    {        
+        _clientStorage.Update(client);
     }
 
-    public void Update(ClientDb client)
-    {
-        var oldClient = Get(client.Id);
-        if (oldClient != null)
-        {
-            oldClient.Name = client.Name;
-            oldClient.Phone = client.Phone;
-            oldClient.Birthday = client.Birthday;
-            oldClient.Bonus = client.Bonus;
-            _clientStorage.Update(oldClient);
-        }        
+    public void Delete(Client client)
+    {        
+        _clientStorage.Delete(client);
     }
 
-    public void Delete(ClientDb client)
-    {
-        var oldClient = Get(client.Id);
-        if (oldClient != null)
-        {
-            _clientStorage.Delete(oldClient);
-        }        
-    }
-
-    public List<ClientDb> GetClients(Filter filter)
+    public List<Client> GetClients(Filter filter)
     {
         var selection = _clientStorage.Data.Clients.
             Where(c => c.Birthday >= filter.DateFrom).
@@ -87,6 +68,20 @@ public class ClientService
         if (filter.Passport != 0)
             selection = selection.Where(c => c.Passport == filter.Passport);
         
-        return selection.ToList();
+        var clientsDb = selection.ToList();
+        var clients = new List<Client>();
+
+        foreach (var clientDb in clientsDb)
+        {
+            var client = new Client();
+            client.Phone = clientDb.Phone;
+            client.Birthday = clientDb.Birthday;
+            client.Name = clientDb.Name;
+            client.Passport = clientDb.Passport;
+            client.Bonus = clientDb.Bonus;            
+
+            clients.Add(client);
+        }
+        return clients;
     }
 }

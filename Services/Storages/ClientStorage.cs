@@ -1,4 +1,7 @@
 ﻿using ModelsDb;
+using Models;
+using Services.Exceptions;
+
 namespace Services.Storages;
 public class ClientStorage : IClientStorage
 {
@@ -9,50 +12,108 @@ public class ClientStorage : IClientStorage
         Data = new BankContext();
     }
 
-    public void Add(ClientDb client)
+    public void Add(Client client)
     {
+        var clientDb = new ClientDb();
+        clientDb.Name = client.Name;
+        clientDb.Phone = client.Phone;
+        clientDb.Birthday = client.Birthday;
+        clientDb.Birthday = DateTime.SpecifyKind(client.Birthday, DateTimeKind.Utc);
+        clientDb.Id = Guid.NewGuid();
+        clientDb.Bonus = client.Bonus;
+        clientDb.Passport = client.Passport;
+
         var defaultAccount = new AccountDb();
-        defaultAccount.ClientId = client.Id;
+        defaultAccount.ClientId = clientDb.Id;
         defaultAccount.Amount = 0;
         var currencys = Data.Currencys.ToList();
-        defaultAccount.CurrencyId = currencys[0].Id;
-        Data.Clients.Add(client);
+        defaultAccount.CurrencyId = currencys[0].Id;        
+
+        Data.Clients.Add(clientDb);
         Data.Accounts.Add(defaultAccount);
         Data.SaveChanges();
     }
 
-    public ClientDb Get(Guid id)
+    public Client Get(Guid id)
     {
-        return Data.Clients.FirstOrDefault(x => x.Id == id);
+        var clientDb = Data.Clients.FirstOrDefault(c => c.Id == id);
+        var client = new Client();
+        if (clientDb != null)
+        {
+            client.Phone = clientDb.Phone;
+            client.Birthday = clientDb.Birthday;
+            client.Name = clientDb.Name;
+            client.Passport = clientDb.Passport;
+            client.Bonus = clientDb.Bonus;
+        }        
+        return client;
     }
 
-    public void Delete(ClientDb client)
+    public void Delete(Client client)
     {
-        Data.Clients.Remove(client);
+        var oldClient = Data.Clients.FirstOrDefault(c => c.Phone.Equals(client.Phone));
+        if (oldClient != null)
+        {
+            Data.Clients.Remove(oldClient);
+            Data.SaveChanges();
+        }                 
+    }
+
+    public void Update(Client client)
+    {
+        var oldClient = Data.Clients.FirstOrDefault(c => c.Passport == client.Passport);
+        if (oldClient != null)
+        {
+            oldClient.Name = client.Name;
+            oldClient.Phone = client.Phone;
+            oldClient.Birthday = client.Birthday;
+            oldClient.Bonus = client.Bonus;
+            Data.Clients.Update(oldClient);
+        }        
         Data.SaveChanges();
     }
 
-    public void Update(ClientDb client)
+    public void AddAccount(Client client, Account account)
     {
-        Data.Clients.Update(client);
-        Data.SaveChanges();
-    }
+        var clientDb = Data.Clients.FirstOrDefault(c => c.Phone.Equals(client.Phone));
+        if (clientDb != null)
+        {
+            var accountsDb = Data.Accounts.Where(x => x.Currency.Code == account.Currency.Code).ToList();
+            if (accountsDb.Count == 0)
+            {
+                var accountDb = new AccountDb();
+                accountDb.ClientId = clientDb.Id;
+                accountDb.Id = Guid.NewGuid();
+                accountDb.Amount = account.Amount;
+                var currencyDb = Data.Currencys.FirstOrDefault(c => c.Code == account.Currency.Code);
+                accountDb.CurrencyId = currencyDb.Id;
 
-    public void AddAccount(Guid id, AccountDb account)
-    {
-        account.ClientId = id;
-        Data.Accounts.Add(account);
-        Data.SaveChanges();
+                Data.Accounts.Add(accountDb);
+                Data.SaveChanges();
+            }
+            else throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
+        }       
     }
     
-    public void UpdateAccount(Guid id, AccountDb account)
+    public void UpdateAccount(Client client, Account account)
     {
         
     }
 
-    public void DeleteAccount(Guid id, AccountDb account)
+    public void DeleteAccount(Client client, Account account)
     {        
-        Data.Accounts.Remove(account);
-        Data.SaveChanges();
+        var clientDb = Data.Clients.FirstOrDefault(c => c.Phone.Equals(client.Phone));
+        if (clientDb != null)
+        {            
+            var accountDb = Data.Accounts.Where(a => a.ClientId == clientDb.Id)
+                .Where(a => a.Currency.Code == account.Currency.Code).FirstOrDefault();
+
+            if (accountDb != null)
+            {
+                Data.Accounts.Remove(accountDb);
+                Data.SaveChanges();
+            }
+            else throw new NoSuchAccountException("Ошибка. У клиента нет такого счета.");
+        }        
     }
 }

@@ -14,7 +14,7 @@ namespace ServiceTests
         public void YongAgeExceptionTest()
         {
             // Arrange
-            var client = new ClientDb();
+            var client = new Client();
             client.Birthday = new DateTime(2016, 2, 9);
             var clientStorage = new ClientStorage();
             var clientService = new ClientService(clientStorage);
@@ -27,7 +27,7 @@ namespace ServiceTests
         public void NoPassportExceptionTest()
         {
             // Arrange
-            var client = new ClientDb();
+            var client = new Client();
             var clientStorage = new ClientStorage();
             var clientService = new ClientService(clientStorage);
 
@@ -46,15 +46,18 @@ namespace ServiceTests
             var client = clientService.Get(id);
 
             //Act
-            var accountNew = new AccountDb();
-            accountNew.Id = Guid.NewGuid();
+            var accountNew = new Account();
+            var currencyNew = new Currency();
+           
             accountNew.Amount = 1000;
             var currency = clientStorage.Data.Currencys.ToList();
-            accountNew.CurrencyId = currency[0].Id;
+            currencyNew.Code = currency[0].Code;
+            currencyNew.Name = currency[0].Name;
+            accountNew.Currency = currencyNew;           
 
             try
             {
-                clientService.AddAccount(client.Id, accountNew);                
+                clientService.AddAccount(client, accountNew);                
             }
             catch(AccountAlreadyExistsException e) 
             { 
@@ -86,15 +89,26 @@ namespace ServiceTests
             var clientStorage = new ClientStorage();
             var clientService = new ClientService(clientStorage);
             var clients = clientStorage.Data.Clients.ToList();
-            Guid id = clients[0].Id;
+            var client = new Client();
+            client.Phone = clients[0].Phone;
+            client.Birthday = clients[0].Birthday;
+            client.Name = clients[0].Name;
+            client.Passport = clients[0].Passport;
+            client.Bonus = clients[0].Bonus;
 
             // Act
-            var account = clientStorage.Data.Accounts.FirstOrDefault(x => x.ClientId == id);
+            var accountDb = clientStorage.Data.Accounts.FirstOrDefault(x => x.ClientId == clients[0].Id);
+            var account = new Account();
+            account.Amount = accountDb.Amount;
+            var currency = new Currency();
+            currency.Name = accountDb.Currency.Name;
+            currency.Code = accountDb.Currency.Code;
+            account.Currency = currency;
 
             // Assert
             try
             {
-                clientService.DeleteAccount(id, account);
+                clientService.DeleteAccount(client, account);
             }
             catch (NoSuchAccountException e)
             {
@@ -114,22 +128,14 @@ namespace ServiceTests
 
             // Act
             foreach (Client client in clients)
-            {
-                var clientDB = new ClientDb();
-                clientDB.Name = client.Name;
-                clientDB.Phone = client.Phone;
-                clientDB.Birthday = client.Birthday;
-                clientDB.Birthday = DateTime.SpecifyKind(client.Birthday, DateTimeKind.Utc);
-                clientDB.Id = Guid.NewGuid();
-                clientDB.Bonus = client.Bonus;
-                clientDB.Passport = client.Passport;
-                clientService.Add(clientDB);
+            {                
+                clientService.Add(client);
                 i++;
             }
             clientStorage.Data.SaveChanges();
             
             // Assert            
-            Assert.True(i == 5);            
+            Assert.True(i == 1000);            
         }
 
         [Fact]
@@ -165,8 +171,8 @@ namespace ServiceTests
             clientService.Delete(client);
             clientStorage.Data.SaveChanges();
 
-            // Assert            
-            Assert.True(clientService.Get(id) == null);
+            // Assert             
+            Assert.False(clientStorage.Data.Clients.Contains(clients[0]));
         }
 
         [Fact]
