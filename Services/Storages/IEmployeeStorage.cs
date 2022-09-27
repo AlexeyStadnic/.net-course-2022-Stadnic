@@ -1,7 +1,7 @@
-﻿using ModelsDb;
+﻿using Models;
 
 namespace Services.Storages;
-public interface IEmployeeStorage : IStorage<EmployeeDb>
+public interface IEmployeeStorage : IStorage<Employee>
 {
     public BankContext Data { get; }
 }

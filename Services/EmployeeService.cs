@@ -1,4 +1,4 @@
-﻿using ModelsDb;
+﻿using Models;
 using Services.Exceptions;
 
 namespace Services;
@@ -11,12 +11,12 @@ public class EmployeeService
         _employeeStorage = employeeStorage;
     }
 
-    public EmployeeDb Get(Guid id)
+    public Employee Get(Guid id)
     {
         return _employeeStorage.Get(id);
     }
 
-    public void Add(EmployeeDb employee) 
+    public void Add(Employee employee) 
     {       
         if (DateTime.Today.Year - employee.Birthday.Year < 18)
         {
@@ -31,29 +31,17 @@ public class EmployeeService
         _employeeStorage.Add(employee);
     }
 
-    public void Update(EmployeeDb employee)
+    public void Update(Employee employee)
     {
-        var oldEmployee = Get(employee.Id);
-        if (oldEmployee != null)
-        {
-            oldEmployee.Name = employee.Name;
-            oldEmployee.Phone = employee.Phone;
-            oldEmployee.Birthday = employee.Birthday;
-            oldEmployee.Bonus = employee.Bonus;
-            _employeeStorage.Update(oldEmployee);
-        }
+        _employeeStorage.Update(employee);
     }
 
-    public void Delete(EmployeeDb employee)
+    public void Delete(Employee employee)
     {
-        var oldEmployee = Get(employee.Id);
-        if (oldEmployee != null)
-        {
-            _employeeStorage.Delete(oldEmployee);
-        }
+        _employeeStorage.Delete(employee);
     }
 
-    public List<EmployeeDb> GetEmployees(Filter filter)
+    public List<Employee> GetEmployees(Filter filter)
     {
         var selection = _employeeStorage.Data.Employees.
             Where(e => e.Birthday >= filter.DateFrom).
@@ -68,6 +56,22 @@ public class EmployeeService
         if (filter.Passport != 0)
             selection = selection.Where(e => e.Passport == filter.Passport);
 
-        return selection.ToList();
+        var employeesDb = selection.ToList();
+        var employees = new List<Employee>();
+
+        foreach (var employeeDb in employeesDb)
+        {
+            var employee = new Employee();
+            employee.Phone = employeeDb.Phone;
+            employee.Name = employeeDb.Name;
+            employee.Birthday = employeeDb.Birthday;
+            employee.Contract = employeeDb.Contract;
+            employee.Bonus = employeeDb.Bonus;
+            employee.Passport = employeeDb.Passport;
+            employee.Salary = employeeDb.Salary;
+
+            employees.Add(employee);
+        }
+        return employees;
     }
 }

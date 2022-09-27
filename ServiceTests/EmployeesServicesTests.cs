@@ -1,5 +1,4 @@
-﻿using ModelsDb;
-using Models;
+﻿using Models;
 using Services.Exceptions;
 using Services;
 using Xunit;
@@ -13,7 +12,7 @@ namespace ServiceTests
         public void YongAgeExceptionTest()
         {
             // Arrange
-            var employee = new EmployeeDb();
+            var employee = new Employee();
             employee.Birthday = new DateTime(2016, 2, 9);
             var employeeStorage = new EmployeeStorage();
             var employeeService = new EmployeeService(employeeStorage);
@@ -26,7 +25,7 @@ namespace ServiceTests
         public void NoPassportExceptionTest()
         {
             // Arrange
-            var employee = new EmployeeDb();
+            var employee = new Employee();
             var employeeStorage = new EmployeeStorage();
             var employeeService = new EmployeeService(employeeStorage);
 
@@ -47,7 +46,7 @@ namespace ServiceTests
             var employee = employeeService.Get(id);
 
             // Assert       
-            Assert.True(employee.Equals(employees[0]));
+            Assert.True(employee.Passport.Equals(employees[0].Passport));
 
         }
 
@@ -63,18 +62,8 @@ namespace ServiceTests
 
             // Act
             foreach (Employee employee in employees)
-            {
-                var employeeDB = new EmployeeDb();
-                employeeDB.Name = employee.Name;
-                employeeDB.Phone = employee.Phone;
-                employeeDB.Birthday = employee.Birthday;
-                employeeDB.Birthday = DateTime.SpecifyKind(employeeDB.Birthday, DateTimeKind.Utc);
-                employeeDB.Id = Guid.NewGuid();
-                employeeDB.Bonus = employee.Bonus;
-                employeeDB.Passport = employee.Passport;
-                employeeDB.Contract = employee.Contract;
-                employeeDB.Salary = employee.Salary;
-                employeeService.Add(employeeDB);
+            {                
+                employeeService.Add(employee);
                 i++;
             }
             employeeStorage.Data.SaveChanges();
@@ -117,7 +106,7 @@ namespace ServiceTests
             employeeStorage.Data.SaveChanges();
 
             // Assert            
-            Assert.True(employeeService.Get(id) == null);
+            Assert.False(employeeStorage.Data.Employees.Contains(employees[0]));
         }
 
         [Fact]

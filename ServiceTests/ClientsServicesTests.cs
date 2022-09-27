@@ -1,5 +1,4 @@
 ﻿using Models;
-using ModelsDb;
 using Services.Exceptions;
 using Services;
 using Services.Storages;
@@ -78,7 +77,7 @@ namespace ServiceTests
             var client = clientService.Get(id);
 
             // Assert       
-            Assert.True(client.Equals(clients[0]));
+            Assert.True(client.Passport.Equals(clients[0].Passport));
             
         }
 
@@ -99,11 +98,17 @@ namespace ServiceTests
             // Act
             var accountDb = clientStorage.Data.Accounts.FirstOrDefault(x => x.ClientId == clients[0].Id);
             var account = new Account();
-            account.Amount = accountDb.Amount;
-            var currency = new Currency();
-            currency.Name = accountDb.Currency.Name;
-            currency.Code = accountDb.Currency.Code;
-            account.Currency = currency;
+            if (accountDb != null)
+            {
+                
+                account.Amount = accountDb.Amount;
+
+                var currencyDb = clientStorage.Data.Currencys.Where(c => c.Id == accountDb.CurrencyId).FirstOrDefault();
+                var currency = new Currency();
+                currency.Name = currencyDb.Name;
+                currency.Code = currencyDb.Code;
+                account.Currency = currency;
+            }            
 
             // Assert
             try
@@ -183,23 +188,23 @@ namespace ServiceTests
             var clientService = new ClientService(clientStorage);            
             
             var filter = new Filter();
-            filter.Name = "Антонина";
+            filter.Name = "Раиса";
             filter.DateFrom = DateTime.Today.AddYears(-60);
             filter.DateFrom = DateTime.SpecifyKind(filter.DateFrom, DateTimeKind.Utc);
             filter.DateBefore = DateTime.Today;
             filter.DateBefore = DateTime.SpecifyKind(filter.DateBefore, DateTimeKind.Utc);
 
             // Act
-            DateTime youngClientBirthday = clientService.GetClients(filter).Max(c => c.Birthday);
+            var youngClientBirthday = clientService.GetClients(filter).Max(c => c.Birthday);            
             var youngClient = clientService.GetClients(filter).
                 FirstOrDefault(c => c.Birthday.Equals(youngClientBirthday));
 
 
-            DateTime oldClientBirthday = clientService.GetClients(filter).Min(c => c.Birthday);
+            var oldClientBirthday = clientService.GetClients(filter).Min(c => c.Birthday);
             var oldClient = clientService.GetClients(filter).
                 FirstOrDefault(c => c.Birthday.Equals(oldClientBirthday));
 
-            double averageAgeClient = clientService.GetClients(filter).
+            var averageAgeClient = clientService.GetClients(filter).
                 Average(c => (DateTime.Now.Year - c.Birthday.Year));
 
             // Assert
