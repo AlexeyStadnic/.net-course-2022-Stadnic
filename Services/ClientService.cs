@@ -13,7 +13,7 @@ public class ClientService
         _clientStorage = clientStorage;
     }
 
-    public void AddClient(Client client)
+    public void Add(Client client)
     {
         if (DateTime.Today.Year - client.Birthday.Year < 18)
         {
@@ -23,40 +23,64 @@ public class ClientService
         if (client.Passport == 0)
         {
             throw new NoPassportException("Ошибка. У клиента отсутствует паспорт.");
-        }
+        }     
+
         _clientStorage.Add(client);
     }
-    
-    public void AddAccount(Client client,Account account)
+
+    public Client Get(Guid id)
+    {        
+        return _clientStorage.Get(id);
+    }
+    public void AddAccount(Client client, Account account)
     {       
-        var accountsOfClient = _clientStorage.Data[client];
-        if (accountsOfClient.Contains(account))
-        {
-            throw new AccountAlreadyExistsException("Ошибка. У клиента уже открыт такой счет.");
-        }
-        _clientStorage.AddAccount(client,account);
+        _clientStorage.AddAccount(client, account);
     }
 
-    public void UpdateAccount(Client client, Account account)
-    {
-        _clientStorage.UpdateAccount(client, account);
+    public void DeleteAccount(Client client, Account account)
+    {        
+        _clientStorage.DeleteAccount(client, account);
     }
 
-    public Dictionary<Client, List<Account>> GetClients(Filter filter)
+    public void Update(Client client)
+    {        
+        _clientStorage.Update(client);
+    }
+
+    public void Delete(Client client)
+    {        
+        _clientStorage.Delete(client);
+    }
+
+    public List<Client> GetClients(Filter filter)
     {
-        var selection = _clientStorage.Data.
-            Where(c => c.Key.Birthday >= filter.DateFrom).
-            Where(c => c.Key.Birthday <= filter.DateBefore);
+        var selection = _clientStorage.Data.Clients.
+            Where(c => c.Birthday >= filter.DateFrom).
+            Where(c => c.Birthday <= filter.DateBefore);
 
         if (filter.Name != null)
-            selection = selection.Where(c => c.Key.Name == filter.Name);
+            selection = selection.Where(c => c.Name == filter.Name);
 
         if (filter.Phone != null)
-            selection = selection.Where(c => c.Key.Phone == filter.Phone);
+            selection = selection.Where(c => c.Phone == filter.Phone);
 
         if (filter.Passport != 0)
-            selection = selection.Where(c => c.Key.Passport == filter.Passport);
+            selection = selection.Where(c => c.Passport == filter.Passport);
+        
+        var clientsDb = selection.ToList();
+        var clients = new List<Client>();
 
-        return selection.ToDictionary(c => c.Key, a => a.Value);
+        foreach (var clientDb in clientsDb)
+        {
+            var client = new Client();
+            client.Phone = clientDb.Phone;
+            client.Birthday = clientDb.Birthday;
+            client.Name = clientDb.Name;
+            client.Passport = clientDb.Passport;
+            client.Bonus = clientDb.Bonus;            
+
+            clients.Add(client);
+        }
+        return clients;
     }
 }

@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\ModelsDB\ModelsDb.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+    <PackageReference Include="CsvHelper" Version="28.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\..\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

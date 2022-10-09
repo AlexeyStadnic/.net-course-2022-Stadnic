@@ -7,8 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Application\ModelsDB\ModelsDb.csproj" />
       <ProjectReference Include="..\Models\Models.csproj" />
       <ProjectReference Include="..\Services\Services.csproj" />
+      <ProjectReference Include="..\Tools\ExportTool\ExportTool.csproj" />
     </ItemGroup>
 
     <ItemGroup>

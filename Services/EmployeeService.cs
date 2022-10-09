@@ -11,7 +11,12 @@ public class EmployeeService
         _employeeStorage = employeeStorage;
     }
 
-    public void AddEmployee(Employee employee) 
+    public Employee Get(Guid id)
+    {
+        return _employeeStorage.Get(id);
+    }
+
+    public void Add(Employee employee) 
     {       
         if (DateTime.Today.Year - employee.Birthday.Year < 18)
         {
@@ -26,9 +31,19 @@ public class EmployeeService
         _employeeStorage.Add(employee);
     }
 
+    public void Update(Employee employee)
+    {
+        _employeeStorage.Update(employee);
+    }
+
+    public void Delete(Employee employee)
+    {
+        _employeeStorage.Delete(employee);
+    }
+
     public List<Employee> GetEmployees(Filter filter)
     {
-        var selection = _employeeStorage.Data.
+        var selection = _employeeStorage.Data.Employees.
             Where(e => e.Birthday >= filter.DateFrom).
             Where(e => e.Birthday <= filter.DateBefore);
 
@@ -41,6 +56,22 @@ public class EmployeeService
         if (filter.Passport != 0)
             selection = selection.Where(e => e.Passport == filter.Passport);
 
-        return selection.ToList();
+        var employeesDb = selection.ToList();
+        var employees = new List<Employee>();
+
+        foreach (var employeeDb in employeesDb)
+        {
+            var employee = new Employee();
+            employee.Phone = employeeDb.Phone;
+            employee.Name = employeeDb.Name;
+            employee.Birthday = employeeDb.Birthday;
+            employee.Contract = employeeDb.Contract;
+            employee.Bonus = employeeDb.Bonus;
+            employee.Passport = employeeDb.Passport;
+            employee.Salary = employeeDb.Salary;
+
+            employees.Add(employee);
+        }
+        return employees;
     }
 }

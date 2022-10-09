@@ -1,14 +1,9 @@
-﻿using Bogus.DataSets;
-using System.Numerics;
-
-namespace Models;
-
+﻿namespace Models;
 
 public class Account
 {
 	public Currency Currency { get; set; }
 	public int Amount { get; set; }
-
     public override bool Equals(object obj)
     {
         if (obj == null)
