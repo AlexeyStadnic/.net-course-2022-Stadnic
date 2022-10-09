@@ -1,4 +1,7 @@
-﻿using Models;
+﻿using ExportTool;
+using Models;
+using Services.Storages;
+using Services;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -50,6 +53,57 @@ namespace ServiceTests
                 }
                 _output.WriteLine($"{Thread.CurrentThread.Name}: {account.Amount}");
             }
+        }
+
+        [Fact]
+        public void ParallelImportExportClientPositiveTest()
+        {
+            //Arrange
+            var clientStorage = new ClientStorage();
+            var clientService = new ClientService(clientStorage);
+
+            string pathToDirectoryImport = Path.Combine("C:", "Users", "user", "source", "repos",
+                ".net-course-2022-Stadnic", "Tools", "TestFiles");
+            string fileNameImport = "clients.csv";
+            ExportService exportServiceImport = new ExportService(pathToDirectoryImport, fileNameImport);            
+            var clientsFromFile = exportServiceImport.ReadClientFromCsv();            
+
+            string pathToDirectoryExport = Path.Combine("C:", "Users", "user", "source", "repos",
+                ".net-course-2022-Stadnic", "Tools", "TestFiles");
+            string fileNameExport = "clientsExport.csv";
+            ExportService exportServiceExport = new ExportService(pathToDirectoryExport, fileNameExport);
+            var clientsDB = clientStorage.Data.Clients.ToList();
+            List<Client> clients = new List<Client>();
+
+            var flowImport = new Thread(() =>
+            {
+                foreach (var client in clientsFromFile)
+                {
+                    clientService.Add(client);                    
+                }
+                clientStorage.Data.SaveChanges();
+                _output.WriteLine($"{Thread.CurrentThread.Name}: клиенты добавлены в базу");
+            });
+            flowImport.Name = "Import";
+
+            var flowExport = new Thread(() =>
+            {
+                for (int j = 0; j < clientsDB.Count; j++)
+                {
+                    Guid id = clientsDB[j].Id;
+                    var client = clientService.Get(id);
+                    clients.Add(client);
+                }
+                exportServiceExport.WriteClientToCsv(clients);
+                _output.WriteLine($"{Thread.CurrentThread.Name}: клиенты добавлены в csv");
+            });
+            flowExport.Name = "Export";
+
+            //Act
+            flowImport.Start();
+            Thread.Sleep(100000);
+            flowExport.Start();
+            Thread.Sleep(50000);
         }
     }
 }
