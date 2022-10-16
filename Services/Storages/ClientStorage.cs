@@ -97,7 +97,18 @@ public class ClientStorage : IClientStorage
     
     public void UpdateAccount(Client client, Account account)
     {
-        
+        var clientDb = Data.Clients.FirstOrDefault(c => c.Phone.Equals(client.Phone));
+        if (clientDb != null)
+        {
+            var accountDb = Data.Accounts.FirstOrDefault(x => x.ClientId == clientDb.Id && x.Currency.Code == account.Currency.Code);
+            if (accountDb != null)
+            {                
+                accountDb.Amount = account.Amount;
+                Data.Accounts.Update(accountDb);
+                Data.SaveChanges();
+            }
+            else throw new NoSuchAccountException("Ошибка. У клиента нет такого счета.");
+        }
     }
 
     public void DeleteAccount(Client client, Account account)

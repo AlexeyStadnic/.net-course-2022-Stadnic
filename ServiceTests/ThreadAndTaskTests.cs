@@ -4,6 +4,7 @@ using Services.Storages;
 using Services;
 using Xunit;
 using Xunit.Abstractions;
+using ModelsDb;
 
 namespace ServiceTests
 {
@@ -104,6 +105,60 @@ namespace ServiceTests
             Thread.Sleep(100000);
             flowExport.Start();
             Thread.Sleep(50000);
+        }
+
+        [Fact]
+        public void RateUpdaterPositiveTest()
+        {
+            //Arrange
+            var cancellation = new CancellationTokenSource(); 
+            var token = cancellation.Token;
+            var rateUpdater = new RateUpdater();
+
+            //Act
+            Task task = rateUpdater.BillDollarsForEachClient(token);
+            task.Wait(25000);
+            cancellation.Cancel();
+        }
+
+        [Fact]
+        public void CashDispenserPositiveTest()
+        {
+            //Arrange            
+            var cash = new CashDispenserService();
+            var tasks = new List<Task>();
+
+            var clientStorage = new ClientStorage();
+            var clientService = new ClientService(clientStorage);
+            var clientsDb = clientStorage.Data.Clients.ToList();
+
+            //Act
+            for (int i = 0; i < 10; i++)
+            {
+                var client = new Client();
+                client.Name = clientsDb[i].Name;
+                client.Phone = clientsDb[i].Phone;
+                client.Birthday = clientsDb[i].Birthday;
+                client.Birthday = DateTime.SpecifyKind(clientsDb[i].Birthday, DateTimeKind.Utc);
+                client.Bonus = clientsDb[i].Bonus;
+                client.Passport = clientsDb[i].Passport;
+
+                var accountDb = clientStorage.Data.Accounts.
+                    FirstOrDefault(x => x.ClientId == clientsDb[i].Id && x.Currency.Code == 840);                
+                var currencyDb = clientStorage.Data.Currencys.ToList();
+                currency.Code = currencyDb[0].Code;
+                currency.Name = currencyDb[0].Name;
+                account.Currency = currency;
+                account.Amount = accountDb.Amount;
+
+                tasks.Add(cash.CashOut(client, account));
+                Task.Delay(500);
+            }
+
+            foreach (var task in tasks)
+            {
+                task.Wait();
+            }
         }
     }
 }

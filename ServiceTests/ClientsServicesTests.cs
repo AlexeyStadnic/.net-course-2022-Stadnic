@@ -3,11 +3,19 @@ using Services.Exceptions;
 using Services;
 using Services.Storages;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ServiceTests
 {
     public class ClientsServicesTests
     {
+        private ITestOutputHelper _output;
+
+        public ClientsServicesTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Fact]
         public void YongAgeExceptionTest()
         {
