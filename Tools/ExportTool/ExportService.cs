@@ -1,6 +1,8 @@
 ﻿using CsvHelper;
 using Models;
+using Newtonsoft.Json;
 using System.Globalization;
+using System.IO;
 using System.IO.Pipes;
 using System.Text;
 
@@ -59,6 +61,26 @@ namespace ExportTool
         private string GetFullPathToFile(string pathToFile, string fileName)
         {
             return Path.Combine(pathToFile, fileName);
+        }
+
+        public void WriteToJSON<T>(List<T> persons, string path) where T : Person
+        {           
+            DirectoryInfo dirInfo = new DirectoryInfo(_pathToDirectory);
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+
+            using (var writer = File.CreateText(path))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(writer, persons);
+            }            
+        }
+
+        public List<T> ReadFromJSON<T>(string path) where T : Person
+        {
+            return JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(path));           
         }
     }
 }
