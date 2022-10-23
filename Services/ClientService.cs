@@ -42,6 +42,11 @@ public class ClientService
         _clientStorage.DeleteAccount(client, account);
     }
 
+    public void UpdateAccount(Client client, Account account)
+    {
+        _clientStorage.UpdateAccount(client, account);
+    }
+
     public void Update(Client client)
     {        
         _clientStorage.Update(client);
